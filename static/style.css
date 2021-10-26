@@ -1,0 +1,132 @@
+:root {
+	--primary: #55f;
+	--primaryText: #fff;
+	--foot: #ccc;
+	--footText: #003;
+	--blockBorder: #999;
+	--editorBackground: #eee;
+	--primaryBackground: #fff;
+	--inputBackground: #ddd;
+	--inputBorder: #ccc;
+	--inputText: #003;
+	font-family: sans-serif;
+}
+
+header#head {
+	background: var(--primary);
+	color: var(--primaryText);
+	padding: .25em;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+header#head a {
+	margin-left: .5em;
+	margin-right: .5em;
+	color: inherit;
+	text-decoration: none;
+}
+
+header#head a#logo {
+	background: url("/img/logo.png");
+	height: 1.5em;
+	margin-bottom: -1px;
+	background-size: 75px;
+	padding: 38px;
+	padding-bottom: 0;
+	padding-top: 0;
+	background-repeat: no-repeat;
+}
+
+body {
+	margin: 0;
+	background: var(--primaryBackground);
+}
+html, body {
+	height: 100%;
+}
+
+.block {
+	background: inherit;
+	color: inherit;
+	padding-bottom: .5em;
+	border: 2px var(--blockBorder) solid;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.block .head {
+	background: var(--foot);
+	color: var(--footText);
+	font-size: 1.5em;
+	padding: .25em;
+}
+
+#content {
+	margin-right: 8px;
+	margin-left: 8px;
+	padding-top: .5em;
+}
+
+footer#foot {
+	background: var(--foot);
+	color: var(--footText);
+	padding: .5em;
+	position: relative;
+	margin-top: 1em;
+}
+
+.project {
+	display: inline-block;
+	margin-left: .25em;
+	margin-right: .25em;
+	text-align: center;
+	margin-top: 0.1em;
+}
+.project .creator {
+	font-size: .95em;
+}
+
+input, button {
+	color: var(--inputText);
+	background: var(--inputBackground);
+	border: 2px var(--inputBorder) solid;
+	margin-top: 2px;
+}
+
+#player {
+	display: block;
+}
+
+.contentEditor {
+	background: var(--editorBackground);
+	padding-left: 1em;
+	padding-top: .5em;
+	padding-bottom: 1em;
+	margin-bottom: .25em;
+}
+
+#path {
+	font-family: monospace;
+}
+
+#userIcon {
+	height: 1.5em;
+	width: auto;
+}
+
+#userName {
+	font-size: 2.5em;
+}
+
+#userAvatar {
+	width: 2.5em;
+	height: auto;
+}
+
+.logout {
+	margin: -4px;
+}
+
+iframe {
+	border: none;
+}

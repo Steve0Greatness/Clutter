@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<link rel="stylesheet" href="/style.css">
+	<title>Clutter -- Create</title>
+</head>
+
+<body>
+	<header id="head"></header>
+	<div class="contentEditor" id="content">
+		<form id="projectIds" onsubmit="return false">
+			<input type="text" placeholder="add link to a shared Scratch project."><br>
+		</form>
+		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button>
+	</div>
+	<div id="player" class="editorPlayer">
+		<iframe width="485" height="402" id="iframe" align="left" src=""></iframe><a onclick=""><img src="/img/nextProject.png" width="200"></a><br><a onclick=""><img src="/img/previousProject.png" width="200"></a><br clear="left">
+	</div>
+	<div class="contentEditor">
+		<button onclick="alert('working on it :P')">Share</button> <input type="text" id="clutterName" placeholder="Clutter Name"> <input type="number" placeholder="Project's Thumbnail Shown"><br>
+		Please Note: this doesn't work yet.
+	</div>
+	<footer id="foot" style="display:none"></footer>
+	<script type="text/javascript" src="/script.js"></script>
+	<script>console.log(JSON.stringify(name))</script>
+</body>
+
+</html>

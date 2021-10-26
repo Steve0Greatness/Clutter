@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<link rel="stylesheet" href="/style.css">
+	<title>Clutter -- Not Found</title>
+</head>
+
+<body>
+	<header id="head"></header>
+	<div id="content">
+		What black magic is this?! The server couldn't find or access <span id="path"></span>.
+	</div>
+	<footer id="foot"></footer>
+	<script type="text/javascript" src="/script.js"></script>
+	<script>
+		document.getElementById("path").innerHTML = location.pathname
+	</script>
+</body>
+
+</html>
