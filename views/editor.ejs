@@ -3,27 +3,57 @@
 
 <head>
 	<link rel="stylesheet" href="/style.css">
+	<% if (isPre == false) { %>
 	<title>Clutter -- Create</title>
+	<% } else { %>
+	<title>Clutter -- Editing: <%= cName %></title>
+	<% } %>
 </head>
 
 <body>
 	<header id="head"></header>
+	<!--Getting the player-->
+	<%- include('player'); -%>
 	<div class="contentEditor" id="content">
+		<!--editing part of the editor-->
+		<% if (isPre == false) { %>
 		<form id="projectIds" onsubmit="return false">
 			<input type="text" placeholder="add link to a shared Scratch project."><br>
 		</form>
-		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button>
-	</div>
-	<div id="player" class="editorPlayer">
-		<iframe width="485" height="402" id="iframe" align="left" src=""></iframe><a onclick=""><img src="/img/nextProject.png" width="200"></a><br><a onclick=""><img src="/img/previousProject.png" width="200"></a><br clear="left">
-	</div>
-	<div class="contentEditor">
-		<button onclick="alert('working on it :P')">Share</button> <input type="text" id="clutterName" placeholder="Clutter Name"> <input type="number" placeholder="Project's Thumbnail Shown"><br>
+		<% } else { %>
+		<form id="projectIds" onsubmit="return false">
+			<% for(var project in proj) { %>
+				<input type="text" placeholder="add link to a shared Scratch project." value="<%= proj[project] %>"><br>
+			<% } %>
+		</form>
+		<% } %>
+
+		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button><br><br>
+		<!--information about the project for sharing-->
+		<button onclick="shareProject()">Share</button>
+		<% if (isPre == false) { %>
+		<input type="text" id="clutterName" placeholder="Clutter Name">
+		<input type="number" placeholder="Project's Thumbnail Shown">
+		<% } else { %>
+		<input type="text" id="clutterName" placeholder="Clutter Name" value="<%= cName %>">
+		<input type="number" placeholder="Project's Thumbnail Shown" value="<%= thum %>">
+		<% } %><br>
 		Please Note: this doesn't work yet.
 	</div>
 	<footer id="foot" style="display:none"></footer>
 	<script type="text/javascript" src="/script.js"></script>
-	<script>console.log(JSON.stringify(name))</script>
+	<script>
+		<%# this changes depending on whether you're editing or changing a project %><% if (isPre == false) { %>console.log("creating a new clutter")<% } else { %>console.log("editing a pre-existing clutter")
+		submitClutter()
+		<% } %>
+		function shareProject() {
+			if (localStorage.getItem("user") == null|undefined) {
+				alert("you must be logged in to share a project")
+			} else {
+				alert("working on it")
+			}
+		}
+	</script>
 </body>
 
 </html>

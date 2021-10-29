@@ -1,3 +1,4 @@
+//setting some constents, and a search tree
 const search = location.search.split(/[?&]/)
 search.shift()
 location.searchtree = {}
@@ -8,8 +9,9 @@ for (let i = 0; i < search.length; i++) {
 		location.searchtree[search[i]] = search[i]
 	}
 }
-
 const path = location.pathname
+
+//replace the header and footer 
 function replace(id, body) {
 	document.getElementById(id).innerHTML = body
 }
@@ -25,12 +27,13 @@ replace("foot", `<table style="text-align:center">
 			<td><a href="/api">API</a></td> <td><a href="/about">About</td>
 		</tr>
 		<tr>
-			<td><a title="No current Github repo">Github</a></td>
+			<td><a href="https://github.com/Steve0Greatness/Clutter">Github</a></td>
 		</tr>
 	</tbody>
 </table>`)
 
-var clutter = []
+/* related to projects*/
+//editor
 var newInput = `<input type="text"><br>`
 var projectIds = document.getElementById("projectIds")
 function addInput() {
@@ -55,6 +58,8 @@ function submitClutter() {
 	}
 	renderClutter(formValues)
 }
+//rendering clutters
+var clutter = []
 function renderClutter(array) {
 	console.log(array, `this should repeat ${array.length} time(s)`)
 	clutter = []
@@ -66,20 +71,40 @@ function renderClutter(array) {
 		}
 	}
 	console.log(clutter)
-	let embed
 	let cluttero = clutter[0]
-	if (cluttero[cluttero.length - 1] == "/") {embed = "embed"} else {embed = "/embed"}
-	console.log(cluttero[cluttero.length] == "/", cluttero, cluttero[cluttero.length - 1])
+	let embed = checkForSlash(cluttero)
 	document.getElementById("iframe").src = clutter[0] + embed
+}
+
+function nextProject(array) {
+	let current = array.indexOf(document.getElementById("iframe").src) + 1
+	let next = array[current + 1]
+	console.log(next)
+	document.getElementById("iframe").src = next + checkForSlash(next)
+}
+
+function lastProject(array) {
+	let current = array.indexOf(document.getElementById("iframe").src) + 1
+	let last = array[current]
+	console.log(last)
+	document.getElementById("iframe").src = last + checkForSlash(last)
+}
+
+function checkForSlash(url) {
+	if (url[url.length - 1] == "/") {
+		return "embed"
+	} else {
+		return "/embed"
+	}
 }
 
 /*relating to loging in*/
 
-function login() {
-	location = (`https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=c3VwZXJmaWNpYWxub3Rld29ydGh5dGhpbmdzLnN0ZXZlc2dyZWF0bmVzcy5yZXBsLmNv`)
+function getLoginURL() {
+	return `https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=${btoa(location.href.substr(8, location.href.length))}`
 }
 
-var loginLink = `<a href="https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=c3VwZXJmaWNpYWxub3Rld29ydGh5dGhpbmdzLnN0ZXZlc2dyZWF0bmVzcy5yZXBsLmNv">Login with FluffyScratch</a>`
+var loginLink = `<a href="${getLoginURL()}">Login with FluffyScratch</a>`
 var login = document.getElementById("login")
 var userIsnt = localStorage.getItem("user") != null|''
 

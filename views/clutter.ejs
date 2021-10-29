@@ -9,9 +9,13 @@
 <body>
 	<header id="head"></header>
 	<div id="content">
+		<%- include("player") -%>
 	</div>
 	<footer id="foot"></footer>
 	<script src="/script.js"></script>
+	<script>
+		var test = <%= JSON.stringify(proj) %>
+	</script>
 </body>
 
 </html>

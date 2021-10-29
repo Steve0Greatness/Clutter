@@ -6,13 +6,19 @@ const path = require("path")
 const Database = require("@replit/database")
 const db = new Database()
 const bodyParser = require('body-parser')
+const testProject = {
+	name: "name:)",
+	included: ["https://scratch.mit.edu/projects/588586405", "https://scratch.mit.edu/projects/487519987"],
+	date: "10/26/21",
+	thumb: 0
+}
 
 //setting the view engine
 app.engine('html', require('ejs').renderFile);
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-//middleware
+//middleware(https://en.wikipedia.org/wiki/Middleware)
 app.use(express.static("static"))
 app.use(favicon(path.join(__dirname, "static", "img", "favicon.ico")))
 app.use(express.json())
@@ -23,13 +29,15 @@ app.get('/', (req, res) => { res.sendFile(`${__dirname}/home.html`) })
 app.get('/create', (req, res) => { res.render("editor", { isPre: false, name: req.body.name })})
 app.get('/edit/:id', (req, res) => {
 	let id = req.params.id
-	let key =  db.get("key")
-	res.render("editor", { isPre: true, projects: key["included"] })
+	let key = testProject
+	//db.get("key")
+	res.render("editor", { isPre: true, proj: key["included"], cName: key["name"], thum: key["thumb"] })
 })
 app.get('/clutters/:id', (req, res) => {
 	let id = req.params.id
-	let key =  db.get("key")
-	res.render('clutter', { clutterName: key["name"], projects: key["included"], datePosted: key["date"] })
+	let key = testProject
+	//db.get("key")
+	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"]})
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
@@ -42,14 +50,15 @@ app.use(function(req, res) { res.sendFile(`${__dirname}/404.html`) })
 app.listen(3000)
 
 /*
-inorder to use arrays, objects, and strings in static js files, use JSON.stringify(varName)
+inorder to use arrays, objects, and strings in static ejs files, use JSON.stringify(varName)
 
-DB plan:
+api layout plan:
 1: {
-	"id": id of clutter,
+	"id": #,
 	"name": "name:)",
-	"included": [project links],
+	"included": [project urls],
 	"date": "date posted",
-	"creator": "creator name"
+	"creator": "creator name",
+	"thumb": #
 }
 */
