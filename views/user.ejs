@@ -4,6 +4,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="/style.css">
 	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -35,7 +36,7 @@
 			.then(data => {
 				let avatar = `//uploads.scratch.mit.edu/users/avatars/${data["id"]}.png`
 				userAvatar.src = avatar
-				pageTitle.innerText = data["username"]
+				pageTitle.innerText = "Clutter -- @" + data["username"]
 				userName.innerHTML = data["username"]
 			})
 	</script>

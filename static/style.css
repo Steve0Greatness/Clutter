@@ -5,13 +5,19 @@
 	--footText: #003;
 	--blockBorder: #999;
 	--editorBackground: #eee;
-	--primaryBackground: #fff;
+	--general: #fff;
+	--generalText: #000;
 	--inputBackground: #ddd;
 	--inputBorder: #ccc;
 	--inputText: #003;
+	--inputSearch: #33d;
+	--commentBackground: #ccc;
+	--commentUserBackground: #aaa;
+	--commentText: #001;
 	font-family: sans-serif;
 }
 
+/*header*/
 header#head {
 	background: var(--primary);
 	color: var(--primaryText);
@@ -38,14 +44,32 @@ header#head a#logo {
 	background-repeat: no-repeat;
 }
 
+/*body*/
 body {
 	margin: 0;
-	background: var(--primaryBackground);
+	background: var(--general);
+	color: var(--generalText);
 }
+
 html, body {
 	height: 100%;
 }
 
+#content {
+	margin-right: 8px;
+	margin-left: 8px;
+	padding-top: .5em;
+}
+
+.contentEditor {
+	background: var(--editorBackground);
+	padding-left: 1em;
+	padding-top: .5em;
+	padding-bottom: 1em;
+	margin-bottom: .25em;
+}
+
+/*featured*/
 .block {
 	background: inherit;
 	color: inherit;
@@ -61,20 +85,6 @@ html, body {
 	padding: .25em;
 }
 
-#content {
-	margin-right: 8px;
-	margin-left: 8px;
-	padding-top: .5em;
-}
-
-footer#foot {
-	background: var(--foot);
-	color: var(--footText);
-	padding: .5em;
-	position: relative;
-	margin-top: 1em;
-}
-
 .project {
 	display: inline-block;
 	margin-left: .25em;
@@ -86,41 +96,21 @@ footer#foot {
 	font-size: .95em;
 }
 
+/*Footer*/
+footer#foot {
+	background: var(--foot);
+	color: var(--footText);
+	padding: .5em;
+	position: relative;
+	margin-top: 1em;
+}
+
+/*Inputs*/
 input, button {
 	color: var(--inputText);
 	background: var(--inputBackground);
 	border: 2px var(--inputBorder) solid;
 	margin-top: 2px;
-}
-
-#player {
-	display: block;
-}
-
-.contentEditor {
-	background: var(--editorBackground);
-	padding-left: 1em;
-	padding-top: .5em;
-	padding-bottom: 1em;
-	margin-bottom: .25em;
-}
-
-#path {
-	font-family: monospace;
-}
-
-#userIcon {
-	height: 1.5em;
-	width: auto;
-}
-
-#userName {
-	font-size: 2.5em;
-}
-
-#userAvatar {
-	width: 2.5em;
-	height: auto;
 }
 
 .logout {
@@ -130,4 +120,52 @@ input, button {
 iframe {
 	border: none;
 	border-radius: 5px;
+}
+.search {
+	background: var(--inputSearch);
+	color: var(--primaryText);
+	border: none;
+	padding: 12px;
+}
+
+#player {
+	display: block;
+}
+
+/*404*/
+#path {
+	font-family: monospace;
+}
+
+/*User Pages*/
+#userIcon {
+	height: 1.5em;
+	width: auto;
+	border-radius: 5px;
+}
+
+#userName {
+	font-size: 2.5em;
+}
+
+#userAvatar {
+	width: 2.5em;
+	height: auto;
+	border-radius: 5px;
+}
+/*Comments*/
+.commentUser {
+	background: var(--commentUserBackground);
+	display: initial;
+	margin-right: 1em;
+	padding: 5px;
+	padding-bottom: 6px;
+}
+.comment {
+	background: var(--commentBackground);
+	color: var(--commentText);
+	display: inline-block;
+	padding: 5px;
+	padding-left: 0;
+	border: 2px var(--blockBorder) solid;
 }

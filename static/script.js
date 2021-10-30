@@ -15,7 +15,7 @@ const path = location.pathname
 function replace(id, body) {
 	document.getElementById(id).innerHTML = body
 }
-replace("head", `<a href="/" id="logo"></a> <a href="/create">Create</a> <a href="/about">About</a> <span id="login"></span>`)
+replace("head", `<a href="/" id="logo"></a> <a href="/create">Create</a> <a href="/about">About</a> <a href="/getstarted">Get Started</a> <form onsubmit="searchBar(document.getElementById('searchText').value); return false;" style="display:inline"><input type="text" class="search" id="searchText"><input type="submit" class="search" value="Search"></form> <span id="login"></span>`)
 replace("foot", `<table style="text-align:center">
 	<thead>
 		<tr>
@@ -27,14 +27,13 @@ replace("foot", `<table style="text-align:center">
 			<td><a href="/api">API</a></td> <td><a href="/about">About</td>
 		</tr>
 		<tr>
-			<td><a href="https://github.com/Steve0Greatness/Clutter">Github</a></td>
+			<td><a href="https://github.com/Steve0Greatness/Clutter">Github</a></td> <td><a href="/getstarted">Get Started</a></td>
 		</tr>
 	</tbody>
 </table>`)
 
 /* related to projects*/
 //editor
-var newInput = `<input type="text"><br>`
 var projectIds = document.getElementById("projectIds")
 function addInput() {
 	let input = document.createElement("input")
@@ -100,6 +99,7 @@ function checkForSlash(url) {
 
 /*relating to loging in*/
 
+//gets the url for redirecting back
 function getLoginURL() {
 	return `https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=${btoa(location.href.substr(8, location.href.length))}`
 }
@@ -108,6 +108,7 @@ var loginLink = `<a href="${getLoginURL()}">Login with FluffyScratch</a>`
 var login = document.getElementById("login")
 var userIsnt = localStorage.getItem("user") != null|''
 
+//check if they have logged in already
 if (Object.keys(location.searchtree).includes("privateCode")) {
 	//check if they have gone though varifacation.
 	fetch("https://fluffyscratch.hampton.pw/auth/verify/v2/" + location.searchtree["privateCode"])
@@ -130,7 +131,13 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" width="25"></a>`
 } else { login.innerHTML = loginLink }
 
+//log them out
 function logout() {
 	login.innerHTML = loginLink
 	localStorage.removeItem("user")
+}
+
+/*Relating to Searching*/
+function searchBar(searchText) {
+	location = "/search/?q=" + searchText
 }

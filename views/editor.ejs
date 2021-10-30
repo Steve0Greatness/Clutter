@@ -8,6 +8,7 @@
 	<% } else { %>
 	<title>Clutter -- Editing: <%= cName %></title>
 	<% } %>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -30,11 +31,13 @@
 
 		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button><br><br>
 		<!--information about the project for sharing-->
-		<button onclick="shareProject()">Share</button>
 		<% if (isPre == false) { %>
+		<button onclick="shareProject()">Share</button>
 		<input type="text" id="clutterName" placeholder="Clutter Name">
 		<input type="number" placeholder="Project's Thumbnail Shown">
 		<% } else { %>
+		<button onclick="shareProject()">Remix & Share</button>
+		<a href="/clutters/<%= id %>"><button>See Page</button></a>
 		<input type="text" id="clutterName" placeholder="Clutter Name" value="<%= cName %>">
 		<input type="number" placeholder="Project's Thumbnail Shown" value="<%= thum %>">
 		<% } %><br>

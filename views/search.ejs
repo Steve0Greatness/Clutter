@@ -3,22 +3,20 @@
 
 <head>
 	<link rel="stylesheet" href="/style.css">
-	<title>Clutter -- <%= cName %></title>
+	<title>Clutter -- Searching: <%= q %></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 	<header id="head"></header>
 	<div id="content">
-		<%- include("player") -%><br>
-		<a href="/edit/<%= id %>"><button>See Inside</button></a><br>
-		<input type="text" id="commentBox"></input> <button>Submit</button>
+		Searcing doesn't really work... afterall, there's no projects to search.
 	</div>
 	<footer id="foot"></footer>
 	<script src="/script.js"></script>
 	<script>
-		var projects = <%- JSON.stringify(proj) -%>;
-		renderClutter(projects)
+		const query = <%- JSON.stringify(q) -%>;
+		document.getElementById("searchText").value = query
 	</script>
 </body>
 
