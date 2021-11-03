@@ -64,8 +64,9 @@ app.get("/sendData", (req, res) => {
 	}
 })
 app.use(function(req, res) { res.sendFile(`${__dirname}/404.html`) })
+
 //listening for a sever connection
-app.listen(3000)
+app.listen(3001)
 
 /*
 inorder to use arrays, objects, and strings in static ejs files, use JSON.stringify(varName)

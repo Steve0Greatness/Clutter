@@ -1,0 +1,14 @@
+# start of file
+user-agent: *
+disallow: /sendData
+disallow: /search
+disallow: /api
+disallow: /edit/
+disallow: /create
+allow: /users/
+allow: /clutters/
+allow: /
+allow: /about
+allow: /getstarted
+
+sitemap: https://clutter.stevesgreatness.repl.co/sitemap.txt

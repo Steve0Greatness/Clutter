@@ -15,7 +15,7 @@ const path = location.pathname
 function replace(id, body) {
 	document.getElementById(id).innerHTML = body
 }
-replace("head", `<a href="/" id="logo"></a> <a href="/create">Create</a> <a href="/about">About</a> <a href="/getstarted">Get Started</a> <form onsubmit="searchBar(document.getElementById('searchText').value); return false;" style="display:inline"><input type="text" class="search" id="searchText"><input type="submit" class="search" value="Search"></form> <span id="login"></span>`)
+replace("head", `<a href="/" id="logo" alt="clutter"></a> <a href="/create">Create</a> <a href="/about">About</a> <a href="/getstarted">Get Started</a> <form onsubmit="searchBar(document.getElementById('searchText').value); return false;" style="display:inline"><input name="search" type="text" class="search" id="searchText"><input type="submit" class="search" value="Search"></form> <span id="login"></span>`)
 replace("foot", `<table style="text-align:center">
 	<thead>
 		<tr>
@@ -117,18 +117,18 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 			if (data["valid"] == true) {
 				//check if valid
 				let user = data["username"]
-				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" width="25"></a>`
+				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25"></a>`
 				localStorage.setItem("user", user)
 			} else if (userIsnt) {
 				//otherwise, check if they're logged in already
 				let user = localStorage.getItem("user")
-				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" width="25"></a>`
+				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25" height="25"></a>`
 			} else { login.innerHTML = loginLink }
 		})
 } else if (userIsnt) {
 	//if the user has a logged in cookie, show that they are logged in.
 	let user = localStorage.getItem("user")
-	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" width="25"></a>`
+	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25" height="25"></a>`
 } else { login.innerHTML = loginLink }
 
 //log them out
