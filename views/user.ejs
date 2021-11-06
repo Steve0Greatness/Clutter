@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<header id="head"></header>
+	<%- include("header") -%>
 	<div id="content">
 		<a target="_new" id="userLink" title="Link to Scratch" href>
 		<table>
@@ -26,7 +26,7 @@
 			</div>
 		</div>
 	</div>
-	<footer id="foot"></footer>
+	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
 		const lastPath = location.pathname.split(/\//).pop()

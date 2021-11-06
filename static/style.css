@@ -17,6 +17,11 @@
 	font-family: sans-serif;
 }
 
+@font-face {
+	font-family: 'logo';
+	src: url('/BlackBoysOnMopeds.ttf');
+}
+
 /*header*/
 header#head {
 	background: var(--primary);
@@ -42,6 +47,10 @@ header#head a#logo {
 	padding-bottom: 0;
 	padding-top: 0;
 	background-repeat: no-repeat;
+	/*font-family: 'logo';
+	font-size: 33px;
+	color: #00ff02;
+	text-shadow: -1px 1px 0 white, 1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white;*/
 }
 
 /*body*/

@@ -1,3 +1,12 @@
 {
-  "files": {}
+  "files": {
+    "views/getStarted.ejs": [
+      {
+        "id": "2bb7869c-52bb-49a5-a2e5-12126d0f4584",
+        "line": 1,
+        "version": 3,
+        "index": 0
+      }
+    ]
+  }
 }

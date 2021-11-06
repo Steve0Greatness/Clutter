@@ -12,11 +12,11 @@
 </head>
 
 <body>
-	<header id="head"></header>
+	<%- include("header") -%>
 	<div id="content">
 		Searcing doesn't really work... afterall, there's no projects to search.
 	</div>
-	<footer id="foot"></footer>
+	<%- include("footer") -%>
 	<script src="/script.js"></script>
 	<script>
 		const query = <%- JSON.stringify(q) -%>;

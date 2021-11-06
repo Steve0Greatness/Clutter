@@ -11,27 +11,6 @@ for (let i = 0; i < search.length; i++) {
 }
 const path = location.pathname
 
-//replace the header and footer 
-function replace(id, body) {
-	document.getElementById(id).innerHTML = body
-}
-replace("head", `<a href="/" id="logo" alt="clutter"></a> <a href="/create">Create</a> <a href="/about">About</a> <a href="/getstarted">Get Started</a> <form onsubmit="searchBar(document.getElementById('searchText').value); return false;" style="display:inline"><input name="search" type="text" class="search" id="searchText"><input type="submit" class="search" value="Search"></form> <span id="login"></span>`)
-replace("foot", `<table style="text-align:center">
-	<thead>
-		<tr>
-			<th>For Devs</th> <th>info</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><a href="/api">API</a></td> <td><a href="/about">About</td>
-		</tr>
-		<tr>
-			<td><a href="https://github.com/Steve0Greatness/Clutter">Github</a></td> <td><a href="/getstarted">Get Started</a></td>
-		</tr>
-	</tbody>
-</table>`)
-
 /* related to projects*/
 //editor
 var projectIds = document.getElementById("projectIds")

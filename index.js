@@ -12,6 +12,14 @@ const testProject = {
 	date: "10/26/21",
 	thumb: 0
 }
+const featured = [
+	{
+		name: "name:)",
+		creator: "Steve0Greatness",
+		included: ["https://scratch.mit.edu/projects/588586405", "https://scratch.mit.edu/projects/487519987"],
+		thumb: 0
+	}
+]
 
 //setting the view engine
 app.engine('html', require('ejs').renderFile);
@@ -19,13 +27,22 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 //middleware(https://en.wikipedia.org/wiki/Middleware)
+app.use(function(req, res, next) {
+	//https://stackoverflow.com/questions/8605720/how-to-force-ssl-https-in-express-js#31144924
+	if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+		return res.redirect('https://' + req.get('host') + req.url);
+	}
+	next();
+})
 app.use(express.static("static"))
 app.use(favicon(path.join(__dirname, "static", "img", "favicon.ico")))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 //rendering pages
-app.get('/', (req, res) => { res.sendFile(`${__dirname}/home.html`) })
+app.get('/', (req, res) => { 
+	res.render("home", { featured: featured }) 
+})
 app.get('/create', (req, res) => { res.render("editor", { isPre: false, name: req.body.name })})
 app.get('/edit/:id', (req, res) => {
 	let id = req.params.id
@@ -43,12 +60,12 @@ app.get('/users/:name', (req, res) => {
 	let name = req.params.name
 	res.render("user")
 })
-app.get("/api", (req, res) => { res.sendFile(`${__dirname}/api.html`) })
-app.get("/about", (req, res) => { res.sendFile(`${__dirname}/about.html`) })
-app.get("/getstarted", (req, res) => { res.sendFile(`${__dirname}/getStarted.html`) })
+app.get("/api", (req, res) => { res.render("api", { message: "not up" }) })
+app.get("/about", (req, res) => { res.render("about") })
+app.get("/getstarted", (req, res) => { res.render("getStarted") })
 app.get("/search", (req, res) => { 
 	let search = req.query.q
-	res.render("search", {q: search}) 
+	res.render("search", { q: search }) 
 })
 app.get("/sendData", (req, res) => {
 	if (req.query.type == "c") {
@@ -63,7 +80,9 @@ app.get("/sendData", (req, res) => {
 		res.send(`<link rel='stylesheet' href='/style.css'>posted by user <span id="path">${poster}</span>, including the projects:<br>${projects.join("<br>")}`)
 	}
 })
-app.use(function(req, res) { res.sendFile(`${__dirname}/404.html`) })
+app.use(function(req, res) {
+	res.render("404", { path: req.path }) 
+})
 
 //listening for a sever connection
 app.listen(3001)

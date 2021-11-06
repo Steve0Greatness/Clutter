@@ -3,20 +3,20 @@
 
 <head>
 	<link rel="stylesheet" href="/style.css">
-	<title>Clutter -- About</title>
+	<title>Clutter -- API docs</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="about Clutter">
+	<meta name="description" content="API docs">
 	<meta name="theme-color" content="#5555ff">
 	<link rel="manifest" href="/manifest.json">
 	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
 </head>
 
 <body>
-	<header id="head"></header>
+	<%- include("header") -%>
 	<div id="content">
-		This website is a project by <a href="//scratch.mit.edu/users/Steve0Greatness">@Steve0Greatness</a>. I made this because the idea of compiling Scratch projects was really cool.
+		<%- message -%>
 	</div>
-	<footer id="foot"></footer>
+	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
 </body>
 

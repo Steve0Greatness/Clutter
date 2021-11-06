@@ -12,13 +12,13 @@
 </head>
 
 <body>
-	<header id="head"></header>
+	<%- include("header") -%>
 	<div id="content">
 		<%- include("player") -%><br>
 		<a href="/edit/<%= id %>"><button>See Inside</button></a><br>
 		<input type="text" id="commentBox"></input> <button>Submit</button>
 	</div>
-	<footer id="foot"></footer>
+	<%- include("footer") -%>
 	<script src="/script.js"></script>
 	<script>
 		var projects = <%- JSON.stringify(proj) -%>;

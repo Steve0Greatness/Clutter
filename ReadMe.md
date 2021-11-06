@@ -6,4 +6,4 @@
 
 Clutter is an editor where you can... make Clutters. It's partially based off of the original one from Scratch 1.4. However, it's only based in name and basic function.
 
-Also, this may or may not also be a reason for me to sit down and use NodeJS.
+Please note that this repo will not be up to date with the website. This is because the website is hosted via Replit, and sometimes I like to make too many changes before commiting to the repo
