@@ -6,18 +6,22 @@ const path = require("path")
 const Database = require("@replit/database")
 const db = new Database()
 const bodyParser = require('body-parser')
+const less = require('less-middleware')
+const port = 3000
 const testProject = {
 	name: "name:)",
 	included: ["https://scratch.mit.edu/projects/588586405", "https://scratch.mit.edu/projects/487519987"],
 	date: "10/26/21",
-	thumb: 0
+	thumb: 0,
+	id: 0
 }
 const featured = [
 	{
 		name: "name:)",
 		creator: "Steve0Greatness",
 		included: ["https://scratch.mit.edu/projects/588586405", "https://scratch.mit.edu/projects/487519987"],
-		thumb: 0
+		thumb: 0,
+		id: 0
 	}
 ]
 
@@ -26,7 +30,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-//middleware(https://en.wikipedia.org/wiki/Middleware)
+//middleware
 app.use(function(req, res, next) {
 	//https://stackoverflow.com/questions/8605720/how-to-force-ssl-https-in-express-js#31144924
 	if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
@@ -34,6 +38,7 @@ app.use(function(req, res, next) {
 	}
 	next();
 })
+app.use(less(path.join(__dirname, "static"), { force: true }))
 app.use(express.static("static"))
 app.use(favicon(path.join(__dirname, "static", "img", "favicon.ico")))
 app.use(express.json())
@@ -58,7 +63,7 @@ app.get('/clutters/:id', (req, res) => {
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
-	res.render("user")
+	res.render("user", { name: name })
 })
 app.get("/api", (req, res) => { res.render("api", { message: "not up" }) })
 app.get("/about", (req, res) => { res.render("about") })
@@ -83,9 +88,13 @@ app.get("/sendData", (req, res) => {
 app.use(function(req, res) {
 	res.render("404", { path: req.path }) 
 })
+app.use(function(err, req, res, next) {
+   console.error(err.stack);
+   res.status(500).render("500")
+})
 
 //listening for a sever connection
-app.listen(3001)
+app.listen(port)
 
 /*
 inorder to use arrays, objects, and strings in static ejs files, use JSON.stringify(varName)

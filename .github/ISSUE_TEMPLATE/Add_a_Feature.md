@@ -1,9 +1,9 @@
 ---
-Name: Add a Feature
-About: Request a new feature
-Title: ✨Feature:
-Lables: type: enhancement
-Assignees:
+name: Add a Feature
+about: Request a new feature
+title: '✨Feature: '
+lables: 'type: enhancement'
+assignees: ''
 
 ---
 

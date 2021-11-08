@@ -29,13 +29,12 @@
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
-		const lastPath = location.pathname.split(/\//).pop()
 		const pageTitle = document.getElementsByTagName("title")[0]
 		const userName = document.querySelector("#userName")
 		const userAvatar = document.querySelector("#userAvatar")
 		const userLink = document.querySelector("#userLink")
-		userLink.href = `//scratch.mit.edu/users/${lastPath}`
-		fetch("//cors.9gr.repl.co/api.scratch.mit.edu/users/" + lastPath)
+		userLink.href = `//scratch.mit.edu/users/${<%- JSON.stringify(name) -%>}`
+		fetch("//cors.9gr.repl.co/api.scratch.mit.edu/users/" + <%- JSON.stringify(name) -%>)
 			.then(blob => blob.json())
 			.then(data => {
 				let avatar = `//uploads.scratch.mit.edu/users/avatars/${data["id"]}.png`

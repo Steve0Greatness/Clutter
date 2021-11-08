@@ -1,0 +1,180 @@
+:root {
+	--primary: #55f;
+	--primaryText: #fff;
+	--foot: #ccc;
+	--footText: #003;
+	--blockBorder: #999;
+	--editorBackground: #eee;
+	--general: #fff;
+	--generalText: #000;
+	--inputBackground: #ddd;
+	--inputBorder: #ccc;
+	--inputText: #003;
+	--inputSearch: #33d;
+	--commentBackground: #ccc;
+	--commentUserBackground: #aaa;
+	--commentText: #001;
+	font-family: sans-serif;
+}
+
+/*header*/
+header#head {
+	background: var(--primary);
+	color: var(--primaryText);
+	padding: .25em;
+	text-align: center;
+	font-size: 1.5em;
+	
+	a {
+		margin-left: .5em;
+		margin-right: .5em;
+		color: inherit;
+		text-decoration: none;
+	}
+	a#logo {
+		background: url("/img/logo.png");
+		height: 1.5em;
+		margin-bottom: -1px;
+		background-size: 100%;
+		padding: 38px;
+		padding-bottom: 0;
+		padding-top: 0;
+		background-repeat: no-repeat;
+		transition: .15s ease all;
+		&:hover {
+					padding-left: 43px;
+					margin-left: 8px;
+		}
+	}
+}
+
+/*body*/
+html, body {
+	height: 100%;
+	margin: 0;
+	background: var(--general);
+	color: var(--generalText);
+}
+
+#content {
+	margin-right: 8px;
+	margin-left: 8px;
+	padding-top: .5em;
+}
+
+.contentEditor {
+	background: var(--editorBackground);
+	padding-left: 1em;
+	padding-top: .5em;
+	padding-bottom: 1em;
+	margin-bottom: .25em;
+}
+
+/*featured*/
+.block {
+	background: inherit;
+	color: inherit;
+	padding-bottom: .5em;
+	border: 2px var(--blockBorder) solid;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	.head {
+		background: var(--foot);
+		color: var(--footText);
+		font-size: 1.5em;
+		padding: .25em;
+	}
+}
+
+.project {
+	display: inline-block;
+	margin-left: .25em;
+	margin-right: .25em;
+	text-align: center;
+	margin-top: 0.1em;
+	.creator {
+		font-size: .95em;
+	}
+}
+
+/*Footer*/
+footer#foot {
+	background: var(--foot);
+	color: var(--footText);
+	padding: .5em;
+	position: relative;
+	margin-top: 1em;
+}
+
+/*Inputs*/
+input, button {
+	color: var(--inputText);
+	background: var(--inputBackground);
+	border: 2px var(--inputBorder) solid;
+	margin-top: 2px;
+}
+
+.logout {
+	margin: -4px;
+}
+
+iframe {
+	border: none;
+	border-radius: 5px;
+}
+.search {
+	background: var(--inputSearch);
+	color: var(--primaryText);
+	border: none;
+	padding: 12px;
+}
+
+#player {
+	display: block;
+}
+
+/*404*/
+#path {
+	font-family: monospace;
+}
+
+center {
+	&#notfound {
+		margin-top: 9em;
+		margin-bottom: 17em;
+	}
+}
+
+/*User Pages*/
+#userIcon {
+	height: 1.5em;
+	width: auto;
+	border-radius: 5px;
+}
+
+#userName {
+	font-size: 2.5em;
+}
+
+#userAvatar {
+	width: 2.5em;
+	height: auto;
+	border-radius: 5px;
+}
+/*Comments*/
+.commentUser {
+	background: var(--commentUserBackground);
+	display: initial;
+	margin-right: 1em;
+	padding: 5px;
+	padding-bottom: 6px;
+}
+
+.comment {
+	background: var(--commentBackground);
+	color: var(--commentText);
+	display: inline-block;
+	padding: 5px;
+	padding-left: 0;
+	border: 2px var(--blockBorder) solid;
+}

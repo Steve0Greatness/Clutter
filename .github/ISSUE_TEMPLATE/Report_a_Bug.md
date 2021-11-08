@@ -1,9 +1,9 @@
 ---
-Name: Report a Bug
-About: Report bugs to make the site better for everyone
-Title: 🐛bug:
-Lables: type: bug
-Assignees:
+name: Report a Bug
+about: Report bugs to make the site better for everyone
+title: '🐛bug: '
+lables: 'type: bug'
+assignees: ''
 
 ---
 

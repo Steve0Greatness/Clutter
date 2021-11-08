@@ -14,10 +14,8 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		<center id="notfound"><img src="/img/Dark-Taco.svg" alt="Dark Wizard Taco" width="600">
-		<h1>404 - Not Fount</h1>
-		What <span style="font-style:italic;font-weight:bold;font-size:20px">black magic</span> is this?!<br>The server couldn't find or access <span id="path"><%= path %></span>.
-		<% if (path.length > 25) { %><br>Well... what did you think would happen if you typed in a url <span style="font-style:italic;font-weight:bold;font-size:20px">that</span> long?<% } %></center>
+		<h1>Error 500 - Internal Server Error</h1>
+		Don't worry, you didn't do anything wrong. This is just an issue with the server.<br>
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
