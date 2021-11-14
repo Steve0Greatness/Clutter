@@ -14,7 +14,51 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		<%- message -%>
+		<h1>API</h1>
+		These are the docs for the API(the backend isn't set up, so it only return debug data right now). All of them are under the endpoint <span class="code">/<span class="inner">api</span>/</span>, and return <a href="https://www.json.org/json-en.html">JSON</a> files.
+		<h2 id="Clutter">Clutter Info</h2>
+		Get data on Clutters<br>
+		Please note that as of currently, It only returns info about the debug Clutter.
+		<div class="code">/<span class="inner">api</span>/<span class="inner">clutter</span>/<span class="quote">:</span><span class="number">id</span></div>
+		Example response:
+		<div class="code">
+			{
+			<div style="margin-left:1em">
+  			<span class="quote">"name"</span>: <span class="quote">"name:)"</span>,<br>
+  			<span class="quote">"creator"</span>: <span class="quote">"Steve0Greatness"</span>,<br>
+  			<span class="quote">"included"</span>: [<span class="quote">"588586405"</span>, <span class="quote">"487519987"</span>],<br>
+  			<span class="quote">"date"</span>: [<span  class="quote">"Sat"</span>, <span class="quote">"Nov"</span>, <span class="number">13</span>, <span class="number">2021</span>],<br>
+  			<span class="quote">"thumb"</span>: <span class="number">0</span>,<br>
+  			<span class="quote">"id"</span>: <span class="number">1</span>,<br>
+  			<span class="quote">"remix"</span>: [<span class="inner">true</span>, <span class="quote">"2"</span>, <span class="quote">"S0G"</span>, <span class="quote">"Yes?"</span>]</div>
+			}
+		</div>
+		<h2 id="User">User Info</h2>
+		Users don't have info yet
+		<div class="code">/<span class="inner">api</span>/<span class="inner">user</span>/<span class="quote">:</span><span class="number">name</span></div>
+		Example response:
+		<div class="code">
+			{<div style="margin-left:1em">
+  			<span class="quote">"notice"</span>: <span class="quote">"Users don't have data in the backend yet, only clutters"</span>,<br>
+  			<span class="quote">"error"</span>: <span class="quote">"NotYours"</span></div>
+			}
+		</div>
+		<h2 id="Featured">Featured Clutters</h2>
+		<div class="code">/<span class="inner">api</span>/<span class="inner">featured</span></div>
+		Example response:
+		<div class="code">
+			[{
+			<div style="margin-left:1em">
+  			<span class="quote">"name"</span>: <span class="quote">"name:)"</span>,<br>
+  			<span class="quote">"creator"</span>: <span class="quote">"Steve0Greatness"</span>,<br>
+  			<span class="quote">"included"</span>: [<span class="quote">"588586405"</span>, <span class="quote">"487519987"</span>],<br>
+  			<span class="quote">"date"</span>: [<span  class="quote">"Sat"</span>, <span class="quote">"Nov"</span>, <span class="number">13</span>, <span class="number">2021</span>],<br>
+  			<span class="quote">"thumb"</span>: <span class="number">0</span>,<br>
+  			<span class="quote">"id"</span>: <span class="number">1</span>,<br>
+  			<span class="quote">"remix"</span>: [<span class="inner">true</span>, <span class="quote">"2"</span>, <span class="quote">"S0G"</span>, <span class="quote">"Yes?"</span>]</div>
+			},<br>
+			...]
+		</div>
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>

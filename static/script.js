@@ -32,7 +32,11 @@ function submitClutter() {
 	let formData = Object.values(form)
 	let formValues = []
 	for (let i = 0; i < formData.length; i++) {
-		formValues.push(formData[i]["value"])
+		if (formData[i]["value"].includes("https://scratch.mit.edu/projects/")) {
+			formValues.push(formData[i]["value"].substr(33, formData[i]["value"].length))
+		} else {
+			alert("Something doesn't seem right about the project at spot " + i + ". Please make sure it's a full project url.")
+		}
 	}
 	renderClutter(formValues)
 }
@@ -41,12 +45,7 @@ var clutter = []
 function renderClutter(array) {
 	console.log(array, `this should repeat ${array.length} time(s)`)
 	clutter = []
-	for (let i = 0; i < array.length; i++) {
-		if (array[i].includes("https://scratch.mit.edu/projects/")) {
-			clutter.push(array[i])
-		} else {
-			console.error("Please make sure you added a Scratch project url")
-		}
+	for (let i = 0; i < array.length; i++) { clutter.push(`//turbowarp.org/${array[i]}` )
 	}
 	console.log(clutter)
 	let cluttero = clutter[0]

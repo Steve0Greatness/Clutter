@@ -7,22 +7,18 @@ const Database = require("@replit/database")
 const db = new Database()
 const bodyParser = require('body-parser')
 const less = require('less-middleware')
-const port = 3000
+const port = 3001
 const testProject = {
 	name: "name:)",
-	included: ["https://scratch.mit.edu/projects/588586405", "https://scratch.mit.edu/projects/487519987"],
-	date: "10/26/21",
+	creator: "Steve0Greatness",
+	included: ["588586405", "487519987"],
+	date: ["Sat", "Nov", 13, 2021],
 	thumb: 0,
-	id: 0
+	id: 1,
+	remix: [true, "2", "S0G", "Yes?"]
 }
 const featured = [
-	{
-		name: "name:)",
-		creator: "Steve0Greatness",
-		included: ["https://scratch.mit.edu/projects/588586405", "https://scratch.mit.edu/projects/487519987"],
-		thumb: 0,
-		id: 0
-	}
+	testProject
 ]
 
 //setting the view engine
@@ -59,38 +55,60 @@ app.get('/clutters/:id', (req, res) => {
 	let id = req.params.id
 	let key = testProject
 	//db.get("key")
-	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id })
+	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
 	res.render("user", { name: name })
 })
-app.get("/api", (req, res) => { res.render("api", { message: "not up" }) })
-app.get("/about", (req, res) => { res.render("about") })
+app.get("/about", (req, res) => { 
+	/*
+	template for contributers:
+	{ info: { 
+			name: "Github UserName",
+			avartar: "https://avatars.githubusercontent.com/u/avartar id",
+			link: "https://github.com/username"
+		},
+		contributes: "use https://allcontributors.org/docs/en/emoji-key to add your what you did"
+	}
+	*/
+	const contributers = [{ info: { 
+			name: "Steve0Greatness",
+			avartar: "https://avatars.githubusercontent.com/u/75220768",
+			link: "https://github.com/Steve0Greatness"
+		},
+		contributes: "🎨🤔💻🖋🚇"
+	}]
+	res.render("about", { contr: contributers })
+})
 app.get("/getstarted", (req, res) => { res.render("getStarted") })
 app.get("/search", (req, res) => { 
 	let search = req.query.q
 	res.render("search", { q: search }) 
 })
-app.get("/sendData", (req, res) => {
-	if (req.query.type == "c") {
-		let body = req.query.body
-		let poster = req.query.user
-		let project = req.query.id
-		let fullPost = `<div class="comment"><h2 class="commentUser">${poster}</h2>${body}</div>`
-		res.send(`<link rel='stylesheet' href='/style.css'>this post is on <span id="path">${project}</span><br>${fullPost}`)
-	} else if (req.query.type == "p") {
-		let projects = req.query.ids.split(" ")
-		let poster = req.query.user
-		res.send(`<link rel='stylesheet' href='/style.css'>posted by user <span id="path">${poster}</span>, including the projects:<br>${projects.join("<br>")}`)
-	}
+
+//api
+app.get("/api", (req, res) => { res.render("api") })
+app.get("/api/clutter/:id", (req, res) => { 
+	let id = req.params.id
+	let key = testProject
+	res.send(key) 
 })
+app.get('/api/user/:name', (req, res) => {
+	let name = req.params.name
+	res.send({ notice: "Users don't have data in the backend yet, only clutters", error: "NotYours" })
+})
+app.get("/api/featured", (req, res) => {
+	res.send(featured)
+})
+
+//errors
 app.use(function(req, res) {
 	res.render("404", { path: req.path }) 
 })
 app.use(function(err, req, res, next) {
-   console.error(err.stack);
-   res.status(500).render("500")
+  console.error(err.stack);
+  res.status(500).render("500")
 })
 
 //listening for a sever connection

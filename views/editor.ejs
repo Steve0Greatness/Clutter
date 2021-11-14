@@ -29,7 +29,7 @@
 		<% } else { %>
 		<form id="projectIds" onsubmit="return false">
 			<% for(var project in proj) { %>
-				<input type="text" placeholder="add link to a shared Scratch project." value="<%= proj[project] %>"><br>
+				<input type="text" placeholder="add link to a shared Scratch project." value="https://scratch.mit.edu/projects/<%= proj[project] %>"><br>
 			<% } %>
 		</form>
 		<% } %><br><br>
@@ -37,16 +37,15 @@
 		<% if (isPre == false) { %>
 		<button onclick="shareProject()">Share</button>
 		<input type="text" id="clutterName" placeholder="Clutter Name">
-		<input type="number" placeholder="Project's Thumbnail Shown">
+		<input type="number" placeholder="Project's Thumbnail Shown" id="thumbnailNum">
 		<% } else { %>
 		<button onclick="shareProject()">Remix & Share</button>
 		<a href="/clutters/<%= id %>"><button>See Page</button></a>
 		<input type="text" id="clutterName" placeholder="Clutter Name" value="<%= cName %>">
-		<input type="number" placeholder="Project's Thumbnail Shown" value="<%= thum %>">
+		<input type="number" placeholder="Project's Thumbnail Shown" value="<%= thum %>" id="thumbnailNum">
 		<% } %><br>
 		Please Note: this doesn't work yet.
 	</div>
-	<footer id="foot" style="display:none"></footer>
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
 		<%# this changes depending on whether you're editing or changing a project %><% if (isPre == false) { %>console.log("creating a new clutter")<% } else { %>console.log("editing a pre-existing clutter")
@@ -56,7 +55,25 @@
 			if (localStorage.getItem("user") == null|undefined) {
 				alert("you must be logged in to share a project")
 			} else {
-				alert("working on it :P")
+				let form = document.forms["projectIds"]
+				let formData = Object.values(form)
+				let formValues = []
+				for (let i = 0; i < formData.length; i++) {
+					if (formData[i]["value"].includes("https://scratch.mit.edu/projects/")) {
+						formValues.push(formData[i]["value"].substr(33, formData[i]["value"].length))
+					} else {
+						alert("Something doesn't seem right about the project at spot " + i + ". Please make sure it's a full project url.")
+						return;
+					}
+				}
+				var data = {
+					name: document.getElementById("clutterName").value,
+					thumb: document.getElementById("thumbnailNum").value,
+					included: formValues,
+					user: localStorage.getItem("user")
+				}
+				console.log(data)
+				alert("working on it")
 			}
 		}
 	</script>

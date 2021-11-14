@@ -14,7 +14,45 @@
 	--commentBackground: #ccc;
 	--commentUserBackground: #aaa;
 	--commentText: #001;
+	--contrTableBorder: black;
+	--code: #bbb;
+	--codequote: #500;
+	--codespecial: #055;
+	--codenum: #550;
+	--codeColor: #000;
 	font-family: sans-serif;
+}
+
+/*API*/
+div.code {
+	font-family: monospace;
+	background: var(--code);
+	padding: 15px;
+	color: var(--codeColor);
+	.quote {
+		color: var(--codequote);
+	}
+	.inner {
+		color: var(--codespecial);
+	}
+	.number {
+		color: var(--codenum);
+	}
+}
+span.code {
+	padding: 5px;
+	font-family: monospace;
+	background: var(--code);
+	color: var(--codeColor);
+	.quote {
+		color: var(--codequote);
+	}
+	.inner {
+		color: var(--codespecial);
+	}
+	.number {
+		color: var(--codenum);
+	}
 }
 
 /*header*/
@@ -68,6 +106,13 @@ html, body {
 	padding-top: .5em;
 	padding-bottom: 1em;
 	margin-bottom: .25em;
+}
+
+a:any-link {
+	color: #055;
+	&:visited {
+		color: #00a;
+	}
 }
 
 /*featured*/
@@ -134,7 +179,7 @@ iframe {
 }
 
 /*404*/
-#path {
+.path {
 	font-family: monospace;
 }
 
@@ -177,4 +222,9 @@ center {
 	padding: 5px;
 	padding-left: 0;
 	border: 2px var(--blockBorder) solid;
+}
+
+/*About*/
+table#contributers, table#contributers tr,table#contributers td,table#contributers th {
+	border: var(--contrTableBorder) 3px solid;
 }

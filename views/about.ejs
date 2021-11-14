@@ -14,8 +14,40 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		This website is a project by <a href="//scratch.mit.edu/users/Steve0Greatness">@Steve0Greatness</a>. I made this because the idea of compiling Scratch projects was really cool.<br>
+		<h1>About</h1>
+		This website is a project by <a href="//scratch.mit.edu/users/Steve0Greatness">@Steve0Greatness</a>, but if you'd like to help, feel free to... <a href="//github.com/Steve0Greatness/clutter">please</a>.
+		<h2>Packages</h2>
 		Also, this uses many <a href="//nodejs.org" title="a language (generally) used to host servers">Nodejs</a> libraries, including <a href="//expressjs.com/" title="a library to host servers">Express</a>, <a href="//ejs.co" title="a templating(something that allows pages to display information from the backend), or view engine">Ejs</a>, <a href="https://nodejs.org/docs/latest/api/path.html" title="Provides the ablity to work with directory(folder) and file paths">path</a>, <a href="https://github.com/emberfeather/less.js-middleware">Less middleware</a>, and <a href="//www.npmjs.com/package/serve-favicon" title="middleware that lets you make /favicon.ico show whatever .ico file you want">Serve Favicon</a>. It also includes <a href="//docs.replit.com/hosting/database-faq" title="a replit library that lets you store data">@replit/database</a> and <a href="//www.npmjs.com/package/body-parser" title="something that lets you read the frontend">body parser</a>, but they aren't yet used.
+		<h2>Base</h2>
+		<p><a href="https://en.scratch-wiki.info/wiki/Clutter">Clutter</a> was a cool little project by the Scratch Team that let you put projects into a playlist, for people to view easily. It was shut down late 2012. There were 3 kinds of Clutters, story; where the user gets to chose when the project goes forward or backword, or have the creator force it by broudcasting -&gt; and &lt;-, it's currently the only available Clutter type here; link; The creator determines words words that link to projects, and the user has to type them out, the creator can also travel between projects by broudcasting -&gt;:project name:, bot available; and secret word; where the user has to type in a secret word to determines where the are, not available.</p>
+		<h2>Scratch 3rd Party</h2>
+		To authenticate users, this uses <a href="https://github.com/hamptonmoore/FluffyScratch/">fluffyscratch</a>.<br>
+		<a href="//turbowarp,org">Turbowarp</a> was used to embed projects.
+		<h2>Contributers</h2>
+		This uses <a href="https://allcontributors.org/docs/en/emoji-key" title="Emojis to see what people contributed to the project">Emoji Key</a>
+		<table id="contributers">
+			<thead>
+				<tr>
+					<th>User</th>
+					<th>Contributes</th>
+				</tr>
+			</thead>
+		<% contr.forEach(element => { %>
+			<tr>
+				<td>
+					<h1>
+						<a href="<%- element["info"]["link"] -%>">
+							<img src="<%- element["info"]["avartar"] -%>" width="24" alt="<%- element["info"]["name"] -%>">
+							<%- element["info"]["name"] -%>
+						</a>
+					</h1>
+				</td>
+				<td>
+					<%- element["contributes"] -%>
+				</td>
+			</tr>
+		<% }) %>
+		</table>
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>

@@ -8,9 +8,7 @@ assignees: ''
 ---
 
 # Explain the feature
-
 What would this new feature do?
 
 # Why is it needed?
-
 Why is it needed? Who would use it?

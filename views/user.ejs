@@ -3,7 +3,8 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="/style.css">
-	<title></title>
+	<title>Clutter -- @<%- name -%></title>
+	<meta name="title" content="Clutter -- @<%- name -%>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="A Clutter user">
 	<meta name="theme-color" content="#5555ff">
@@ -16,7 +17,7 @@
 	<div id="content">
 		<a target="_new" id="userLink" title="Link to Scratch" href>
 		<table>
-			<tr><td><img src id="userAvatar"></td><td id="userName"></td></tr>
+			<tr><td><img src id="userAvatar"></td><td id="userName"><%- name -%></td></tr>
 		</table>
 		</a>
 		<div class="block" style="display: inline-block;"><div class="head">Featured Clutter</div></div><br><br>
@@ -30,7 +31,6 @@
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
 		const pageTitle = document.getElementsByTagName("title")[0]
-		const userName = document.querySelector("#userName")
 		const userAvatar = document.querySelector("#userAvatar")
 		const userLink = document.querySelector("#userLink")
 		userLink.href = `//scratch.mit.edu/users/${<%- JSON.stringify(name) -%>}`
@@ -39,8 +39,6 @@
 			.then(data => {
 				let avatar = `//uploads.scratch.mit.edu/users/avatars/${data["id"]}.png`
 				userAvatar.src = avatar
-				pageTitle.innerText = "Clutter -- @" + data["username"]
-				userName.innerHTML = data["username"]
 			})
 	</script>
 </body>

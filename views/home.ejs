@@ -4,11 +4,13 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="/style.css">
 	<title>Clutter -- Compile Scratch Projects</title>
+	<meta name="title" content="Clutter -- Compile Scratch Projects">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Clutter is a program to compile Scratch projects">
 	<meta name="theme-color" content="#5555ff">
 	<link rel="manifest" href="/manifest.json">
 	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<%- include("social") -%>
 </head>
 
 <body>
@@ -22,7 +24,7 @@
 			<% for (let i = 0; i < featured.length; i++) { %>
 			<div class="project">
 				<a href="/clutters/1">
-					<img src="https://uploads.scratch.mit.edu/projects/thumbnails<%- featured[i]["included"][featured[i]["thumb"]].substr(32, featured[i]["included"][featured[i]["thumb"]].length) -%>.png" width="120" alt="<%- featured[i]["name"] -%> Thumbnail"><br>
+					<img src="https://uploads.scratch.mit.edu/projects/thumbnails/<%- featured[i]["included"][featured[i]["thumb"]] -%>.png" width="120" alt="<%- featured[i]["name"] -%>'s Thumbnail"><br>
 					<%- featured[i]["name"] -%>
 					</a><br>
 					<a href="/users/<%- featured[i]["creator"] -%>"><%- featured[i]["creator"] -%></a>

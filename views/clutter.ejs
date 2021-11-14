@@ -5,7 +5,8 @@
 	<link rel="stylesheet" href="/style.css">
 	<title>Clutter -- <%= cName %></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="a Clutter">
+	<meta name="description" content="<%- cName -%> on Clutter">
+	<meta name="title" content="Clutter -- <%- cName -%>">
 	<meta name="theme-color" content="#5555ff">
 	<link rel="manifest" href="/manifest.json">
 	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
@@ -14,7 +15,14 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
+		<%- cName -%> by <a href="/users/<%- creator -%>"><%- creator -%></a><br>
+		<% if (remix) { %>
+		Remixed from <a href="/clutters/<%- original -%>"><%- originalName -%></a> by <a href="/users/<%- originalCreator -%>"><%- originalCreator-%></a>
+		<% } %>
 		<%- include("player") -%><br>
+		<div id="date">
+			<%- dateP[0] -%>, <%- dateP[1] -%> <%- dateP[2] -%> <%- dateP[3] -%>(PST)
+		</div>
 		<a href="/edit/<%= id %>"><button>See Inside</button></a><br>
 		<input type="text" id="commentBox"></input> <button>Submit</button>
 	</div>
