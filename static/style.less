@@ -20,7 +20,14 @@
 	--codespecial: #055;
 	--codenum: #550;
 	--codeColor: #000;
+	--commentboxBackground: #444;
+	--commentLink: #00f;
+	--commentUsera: #fff;
 	font-family: sans-serif;
+}
+
+details > summary {
+	cursor: pointer;
 }
 
 /*API*/
@@ -80,8 +87,8 @@ header#head {
 		background-repeat: no-repeat;
 		transition: .15s ease all;
 		&:hover {
-					padding-left: 43px;
-					margin-left: 8px;
+			padding-left: 43px;
+			margin-left: 8px;
 		}
 	}
 }
@@ -206,15 +213,8 @@ center {
 	height: auto;
 	border-radius: 5px;
 }
-/*Comments*/
-.commentUser {
-	background: var(--commentUserBackground);
-	display: initial;
-	margin-right: 1em;
-	padding: 5px;
-	padding-bottom: 6px;
-}
 
+/*Comments*/
 .comment {
 	background: var(--commentBackground);
 	color: var(--commentText);
@@ -222,9 +222,35 @@ center {
 	padding: 5px;
 	padding-left: 0;
 	border: 2px var(--blockBorder) solid;
+	.commentUser {
+		background: var(--commentUserBackground);
+		display: initial;
+		margin-right: 1em;
+		padding: 5px;
+		padding-bottom: 6px;
+		:any-link {
+			color: var(--commentUsera);
+			font-weight: bolder;
+			text-decoration: none;
+		}
+	}
+	:any-link {
+		color: var(--commentLink);
+	}
+}
+
+#comments {
+	margin-top: 5px;
 }
 
 /*About*/
-table#contributers, table#contributers tr,table#contributers td,table#contributers th {
+table#contributers, 
+table#contributers tr,
+table#contributers td,
+table#contributers th,
+table.viewTable, 
+table.viewTable tr,
+table.viewTable td,
+table.viewTable th {
 	border: var(--contrTableBorder) 3px solid;
 }

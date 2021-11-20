@@ -15,16 +15,18 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		<%- cName -%> by <a href="/users/<%- creator -%>"><%- creator -%></a><br>
+		<a href="/users/<%- creator -%>"><%- creator -%></a>
+		<h1><%- cName -%> </h1>
 		<% if (remix) { %>
 		Remixed from <a href="/clutters/<%- original -%>"><%- originalName -%></a> by <a href="/users/<%- originalCreator -%>"><%- originalCreator-%></a>
 		<% } %>
 		<%- include("player") -%><br>
-		<div id="date">
-			<%- dateP[0] -%>, <%- dateP[1] -%> <%- dateP[2] -%> <%- dateP[3] -%>(PST)
-		</div>
-		<a href="/edit/<%= id %>"><button>See Inside</button></a><br>
+		<span id="date">
+			<%- dateP -%>(PST)
+		</span> <a href="/edit/<%= id %>"><button>See Inside</button></a><br>
 		<input type="text" id="commentBox"></input> <button>Submit</button>
+		<div id="comments">
+		</div>
 	</div>
 	<%- include("footer") -%>
 	<script src="/script.js"></script>
@@ -35,3 +37,7 @@
 </body>
 
 </html>
+<!--<div class="comment">
+				<div class="commentUser"><a href="/users/<user>"><user></a></div>
+				<body>
+			</div>-->

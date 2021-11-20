@@ -7,19 +7,17 @@ const Database = require("@replit/database")
 const db = new Database()
 const bodyParser = require('body-parser')
 const less = require('less-middleware')
-const port = 3001
+const port = 3000
 const testProject = {
 	name: "name:)",
 	creator: "Steve0Greatness",
 	included: ["588586405", "487519987"],
-	date: ["Sat", "Nov", 13, 2021],
+	date: "Sat, Nov 13 2021",
 	thumb: 0,
 	id: 1,
-	remix: [true, "2", "S0G", "Yes?"]
+	remix: [false, "", "", ""]
 }
-const featured = [
-	testProject
-]
+var featured = [testProject]
 
 //setting the view engine
 app.engine('html', require('ejs').renderFile);
@@ -41,27 +39,32 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 //rendering pages
-app.get('/', (req, res) => { 
-	res.render("home", { featured: featured }) 
+app.get('/', (req, res) => {
+	res.render("home", { featured: featured })
 })
-app.get('/create', (req, res) => { res.render("editor", { isPre: false, name: req.body.name })})
+app.get('/create', (req, res) => { res.render("editor", { isPre: false, name: req.body.name }) })
 app.get('/edit/:id', (req, res) => {
 	let id = req.params.id
-	let key = testProject
-	//db.get("key")
-	res.render("editor", { isPre: true, proj: key["included"], cName: key["name"], thum: key["thumb"], id: id })
+	db.get(id).then(value => {
+		let key = JSON.parse(value)
+		res.render("editor", { isPre: true, proj: key["included"], cName: key["name"], thum: key["thumb"], id: id })
+	})
 })
 app.get('/clutters/:id', (req, res) => {
 	let id = req.params.id
-	let key = testProject
-	//db.get("key")
-	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
+	db.get(id).then(value => {
+		let key = JSON.parse(value)
+		res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
+	}).catch(error => {
+		console.log("error")
+		res.render("404", { path: id, type: 1 })
+	})
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
 	res.render("user", { name: name })
 })
-app.get("/about", (req, res) => { 
+app.get("/about", (req, res) => {
 	/*
 	template for contributers:
 	{ info: { 
@@ -72,7 +75,8 @@ app.get("/about", (req, res) => {
 		contributes: "use https://allcontributors.org/docs/en/emoji-key to add your what you did"
 	}
 	*/
-	const contributers = [{ info: { 
+	const contributers = [{
+		info: {
 			name: "Steve0Greatness",
 			avartar: "https://avatars.githubusercontent.com/u/75220768",
 			link: "https://github.com/Steve0Greatness"
@@ -82,17 +86,22 @@ app.get("/about", (req, res) => {
 	res.render("about", { contr: contributers })
 })
 app.get("/getstarted", (req, res) => { res.render("getStarted") })
-app.get("/search", (req, res) => { 
+app.get("/search", (req, res) => {
 	let search = req.query.q
-	res.render("search", { q: search }) 
+	res.render("search", { q: search })
 })
 
-//api
-app.get("/api", (req, res) => { res.render("api") })
-app.get("/api/clutter/:id", (req, res) => { 
+//api(note, this would have been a subdomain but replit doesn't support them)
+app.get("/api", (req, res) => { 
+	res.send({ notice: "couldn't find endpoint", error: 404 })
+})
+app.get("/api/docs", (req, res) => { res.render("api") })
+app.get("/api/clutter/:id", (req, res) => {
 	let id = req.params.id
-	let key = testProject
-	res.send(key) 
+	db.get(id).then(value => { 
+		if (value["included"]) {}
+		res.send(JSON.parse(value)) 
+	}).catch(error => {res.send({ notice: "couldn't find Clutter!", error: "404" })})
 })
 app.get('/api/user/:name', (req, res) => {
 	let name = req.params.name
@@ -104,11 +113,11 @@ app.get("/api/featured", (req, res) => {
 
 //errors
 app.use(function(req, res) {
-	res.render("404", { path: req.path }) 
+	res.render("404", { path: req.path, type: 0 })
 })
 app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).render("500")
+	console.error(err.stack);
+	res.status(500).render("500")
 })
 
 //listening for a sever connection

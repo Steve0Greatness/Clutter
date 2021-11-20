@@ -50,21 +50,24 @@ function renderClutter(array) {
 	console.log(clutter)
 	let cluttero = clutter[0]
 	let embed = checkForSlash(cluttero)
-	document.getElementById("iframe").src = clutter[0] + embed
+	let user = checkLogin()
+	document.getElementById("iframe").src = clutter[0] + embed + "?username=" + user
 }
 
 function nextProject(array) {
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let next = array[current + 1]
+	let user = checkLogin()
 	console.log(next)
-	document.getElementById("iframe").src = next + checkForSlash(next)
+	document.getElementById("iframe").src = next + checkForSlash(next) + "?username=" + user
 }
 
 function lastProject(array) {
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let last = array[current]
 	console.log(last)
-	document.getElementById("iframe").src = last + checkForSlash(last)
+	let user = checkLogin()
+	document.getElementById("iframe").src = last + checkForSlash(last) + user
 }
 
 function checkForSlash(url) {
@@ -108,6 +111,14 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 	let user = localStorage.getItem("user")
 	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25" height="25"></a>`
 } else { login.innerHTML = loginLink }
+
+function checkLogin() {
+	let user = ""
+	if (localStorage.getItem("user") != null|undefined) {
+		user = localStorage.getItem("user")
+	}
+	return user
+}
 
 //log them out
 function logout() {
