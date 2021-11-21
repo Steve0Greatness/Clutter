@@ -14,11 +14,39 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		<center id="notfound"><img src="/img/Dark-Taco.svg" alt="Dark Wizard Taco" width="600">
+		<center id="notfound"><img src="/img/Dark-Taco.svg" alt="Dark Wizard Taco" width="600" id="darkWizardTaco">
 		<h1>404 - Not Fount</h1>
 		What <span style="font-style:italic;font-weight:bold;font-size:20px">black magic</span> is this?!<br>The server couldn't find or access <% if (type == 1) { %>the Clutter by the id of<% } %> <span class="path"><%= path %></span>.
 		<% if (path.length > 25) { %><br>Well... what did you think would happen if you typed in a url <span style="font-style:italic;font-weight:bold;font-size:20px">that</span> long?<% } %></center>
 	</div>
+	<script>
+		/*let data = {
+			included: ["572165607", "596737107", "596737107"],
+			user: "S0G",
+			thumb: 0,
+			remix: [false, "", "", ""]
+		}
+		let comment = {
+			user: "S0G",
+			body: `Hello, World!`,
+			for: "1"
+		}
+		
+		fetch("/post/clutter", {
+			method: 'PUT',
+			headers: { 'Content-Type':'application/json' },
+			body: JSON.stringify(data)
+		})
+		fetch("/post/comment", {
+			method: 'PUT',
+			headers: { 'Content-Type':'application/json' },
+			body: JSON.stringify(comment)
+		})*/
+		
+		if (screen.width < 600) {
+			document.getElementById("darkWizardTaco").width = screen.width - 30
+		}
+	</script>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
 </body>

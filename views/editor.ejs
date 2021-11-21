@@ -44,7 +44,6 @@
 		<input type="text" id="clutterName" placeholder="Clutter Name" value="<%= cName %>">
 		<input type="number" placeholder="Project's Thumbnail Shown" value="<%= thum %>" id="thumbnailNum">
 		<% } %><br>
-		Please Note: this doesn't work yet.
 	</div>
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
@@ -55,12 +54,20 @@
 			if (localStorage.getItem("user") == null|undefined) {
 				alert("you must be logged in to share a project")
 			} else {
+				if (document.getElementById("clutterName").value|document.getElementById("thumbnailNum").value == '') { 
+					alert("Error")
+					return; 
+				}
 				let form = document.forms["projectIds"]
 				let formData = Object.values(form)
 				let formValues = []
 				for (let i = 0; i < formData.length; i++) {
 					if (formData[i]["value"].includes("https://scratch.mit.edu/projects/")) {
-						formValues.push(formData[i]["value"].substr(33, formData[i]["value"].length))
+						let curdata = formData[i]["value"].substr(33, formData[i]["value"].length)
+						if (checkForSlashTF(curdata)) {
+							curdata = curdata.substr(0, curdata.length - 1)
+						}
+						formValues.push(curdata)
 					} else {
 						alert("Something doesn't seem right about the project at spot " + i + ". Please make sure it's a full project url.")
 						return;
@@ -68,12 +75,21 @@
 				}
 				var data = {
 					name: document.getElementById("clutterName").value,
-					thumb: document.getElementById("thumbnailNum").value,
+					thumb: document.getElementById("thumbnailNum").value - 1,
 					included: formValues,
-					user: localStorage.getItem("user")
+					creator: localStorage.getItem("user"),
+					<% if (isPre) { %>remix: [true, <%- JSON.stringify(id) -%>, <%- JSON.stringify(creator) -%>, <%- JSON.stringify(cName) -%>]<% } else { %>remix: [false, "", "", ""]<% } %>
 				}
-				console.log(data)
-				alert("working on it")
+				fetch("/post/clutter", {
+					method: 'PUT',
+					headers: { 'Content-Type':'application/json' },
+					body: JSON.stringify(data)
+				})
+					.then(res => res.json())
+					.then(data => {
+						console.log(data)
+						//location = "/projects/" + data["id"]
+					})
 			}
 		}
 	</script>

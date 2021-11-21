@@ -105,14 +105,8 @@ html, body {
 	margin-right: 8px;
 	margin-left: 8px;
 	padding-top: .5em;
-}
-
-.contentEditor {
-	background: var(--editorBackground);
-	padding-left: 1em;
-	padding-top: .5em;
-	padding-bottom: 1em;
-	margin-bottom: .25em;
+	min-height: 85%;
+	height: auto;
 }
 
 a:any-link {
@@ -193,7 +187,6 @@ iframe {
 center {
 	&#notfound {
 		margin-top: 9em;
-		margin-bottom: 17em;
 	}
 }
 
@@ -253,4 +246,15 @@ table.viewTable tr,
 table.viewTable td,
 table.viewTable th {
 	border: var(--contrTableBorder) 3px solid;
+}
+
+/*EDITOR*/
+.contentEditor {
+	background: var(--editorBackground);
+	padding-left: 1em;
+	padding-top: .5em;
+	padding-bottom: 1em;
+	margin-bottom: .25em;
+	height: auto;
+	min-height: 55%;
 }

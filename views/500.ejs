@@ -14,11 +14,19 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
+	<center id="notfound">
+		<img src="/img/Ghosty.svg" width="450" id="ghosty">
 		<h1>Error 500 - Internal Server Error</h1>
 		Don't worry, you didn't do anything wrong. This is just an issue with the server.<br>
+	</center>
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
+	<script>
+		if (screen.width < 450) {
+			document.getElementById("ghosty").width = screen.width - 30
+		}
+	</script>
 </body>
 
 </html>

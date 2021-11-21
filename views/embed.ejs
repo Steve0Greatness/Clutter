@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<%- include("player") -%><a href="/clutters/<%- id -%>">Original</a>
+<script>
+var clutter = []
+function renderClutter(array) {
+	console.log(array, `this should repeat ${array.length} time(s)`)
+	clutter = []
+	for (let i = 0; i < array.length; i++) { clutter.push(`//turbowarp.org/${array[i]}` )
+	}
+	console.log(clutter)
+	let cluttero = clutter[0]
+	let embed = checkForSlash(cluttero)
+	document.getElementById("iframe").src = clutter[0] + embed
+}
+
+function nextProject(array) {
+	let current = array.indexOf(document.getElementById("iframe").src) + 1
+	let next = array[current + 1]
+	console.log(next)
+	document.getElementById("iframe").src = next + checkForSlash(next)
+}
+
+function lastProject(array) {
+	let current = array.indexOf(document.getElementById("iframe").src) + 1
+	let last = array[current]
+	console.log(last)
+	document.getElementById("iframe").src = last + checkForSlash(last)
+}
+
+function checkForSlash(url) {
+	if (url[url.length - 1] == "/") {
+		return "embed"
+	} else {
+		return "/embed"
+	}
+}
+function checkForSlashTF(url) {
+	if (url[url.length - 1] == "/") {
+		return true
+	} else {
+		return false
+	}
+}
+renderClutter(<%- JSON.stringify(proj) -%>)
+</script>
+</body>
+
+</html>

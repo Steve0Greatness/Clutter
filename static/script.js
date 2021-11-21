@@ -77,6 +77,13 @@ function checkForSlash(url) {
 		return "/embed"
 	}
 }
+function checkForSlashTF(url) {
+	if (url[url.length - 1] == "/") {
+		return true
+	} else {
+		return false
+	}
+}
 
 /*relating to loging in*/
 

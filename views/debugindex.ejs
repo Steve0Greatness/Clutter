@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="/style.css">
+	<title>Clutter -- Debug Pages</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#5555ff">
+	<link rel="manifest" href="/manifest.json">
+	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+</head>
+
+<body>
+	<%- include("header") -%>
+	<div id="content">
+	<h1>Debug Pages</h1>
+	<p>Test pages, for testing out designs for pages that can't normally be seen</p>
+	<ul>
+		<li><a href="/debug/500">500</a>: test the internal server issue page</li>
+		<li><a href="/debug/404">404</a>: test the not found page</li>
+	</ul>
+	</div>
+	<%- include("footer") -%>
+</body>
+
+</html>
