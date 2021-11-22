@@ -1,22 +1,27 @@
 {
-  "name": "Clutter",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@replit/database": "^2.0.1",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "less-middleware": "^3.1.0",
-    "serve-favicon": "^2.5.0"
-  }
+	"name": "Clutter",
+	"version": "1.0.0",
+	"description": "Compile Scratch projects into a playlist like thing",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js"
+	},
+	"keywords": [
+		"compile",
+		"scratch",
+		"scratch3",
+		"clutter"
+	],
+	"author": "Steve0Greatness",
+	"license": "ISC",
+	"dependencies": {
+		"@replit/database": "^2.0.1",
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
+		"ejs": "^3.1.6",
+		"express": "^4.17.1",
+		"less-middleware": "^3.1.0",
+		"serve-favicon": "^2.5.0"
+	}
 }

@@ -67,7 +67,7 @@ function lastProject(array) {
 	let last = array[current]
 	console.log(last)
 	let user = checkLogin()
-	document.getElementById("iframe").src = last + checkForSlash(last) + user
+	document.getElementById("iframe").src = last + checkForSlash(last) + "?username=" + user
 }
 
 function checkForSlash(url) {

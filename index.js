@@ -5,6 +5,7 @@ const favicon = require('serve-favicon')
 const path = require("path")
 const Database = require("@replit/database")
 const db = new Database()
+const user = new Database()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const less = require('less-middleware')
@@ -23,13 +24,13 @@ const daysOfTheWeek = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
 const monthsOfTheYear = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const whitelist = ['https://clutter.stevesgreatness.repl.co']
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
+	origin: function(origin, callback) {
+		if (whitelist.indexOf(origin) !== -1) {
+			callback(null, true)
+		} else {
+			callback(new Error('Not allowed by CORS'))
+		}
+	}
 }
 
 //setting the view engine
@@ -75,7 +76,20 @@ app.get('/clutters/:id', (req, res) => {
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
-	res.render("user", { name: name })
+	let clutters = []
+	db.list().then(keys => {
+		for (var i in keys) {
+			db.get(String(keys[i])).then(value => {
+				let data = JSON.parse(value)
+				if (data["creator"].toUpperCase() == name.toUpperCase()) {
+					clutters.push(data)
+				}
+			})
+		}
+		setTimeout(function() {
+			res.render("user", { name: name, made: clutters })
+		}, 500)
+	})
 })
 app.get("/about", (req, res) => {
 	/*
@@ -118,18 +132,46 @@ app.get("/embed/:id", cors(), (req, res) => {
 app.get("/api/docs", cors(), (req, res) => { res.render("api") })
 app.get("/api/clutter/:id", cors(), (req, res) => {
 	let id = req.params.id
-	db.get(id).then(value => { 
-		res.send(JSON.parse(value)) 
-	}).catch(error => {res.send({ notice: "couldn't find Clutter!", error: "404" })})
+	db.get(id).then(value => {
+		res.send(JSON.parse(value))
+	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
+})
+app.get("/api/clutter/:id/comments", cors(), (req, res) => {
+	let id = req.params.id
+	db.get(id).then(value => {
+		res.send({ notice: "Comments can't currently be read", error: "NotYours"})
+	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
+})
+app.get("/api/clutter/:id/thumbnail", cors(), (req, res) => {
+	let id = req.params.id
+	db.get(id).then(value => {
+		let i = JSON.parse(value)
+		res.send(i["included"][i["thumb"]])
+	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
 })
 app.get('/api/user/:name', cors(), (req, res) => {
 	let name = req.params.name
-	res.send({ notice: "Users don't have data in the backend yet, only clutters", error: "NotYours" })
+	let clutters = []
+	db.list().then(keys => {
+		for (var i in keys) {
+			db.get(String(keys[i])).then(value => {
+				let data = JSON.parse(value)
+				if (data["creator"].toUpperCase() == name.toUpperCase()) {
+					clutters.push(data)
+				}
+			})
+		}
+		setTimeout(function() {
+			let sendObject = { name: name, clutters: clutters}
+			res.send(sendObject)
+			console.log(sendObject)
+		}, 1000)
+	})
 })
 app.get("/api/featured", cors(), (req, res) => {
 	res.send(featured)
 })
-app.get("/api/*", cors(), (req, res) => { 
+app.get("/api/*", cors(), (req, res) => {
 	res.send({ notice: "couldn't find endpoint", error: 404 })
 })
 
@@ -140,19 +182,21 @@ app.put("/post/clutter", cors(corsOptions), (req, res) => {
 	finalDate = `${daysOfTheWeek[date.getDay()]}, ${monthsOfTheYear[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`
 	data["date"] = finalDate
 	db.list().then(keys => data["id"] = Number(keys[keys.length - 1]) + 1)
-	setTimeout(function(){
+	setTimeout(function() {
 		res.send(data)
 	}, 1000)
 })
 app.put("/post/comment", cors(corsOptions), (req, res) => {
 	let data = req.body
-	let datakeys = JSON.keys(data)
 	console.log(data)
 })
 
 //debug pages
 app.get("/debug/", (req, res) => {
 	res.render("debugindex")
+})
+app.get("/debug/project-404", (req, res) => {
+	res.render("404", { path: 0, type: 1 })
 })
 app.get("/debug/500", (req, res) => {
 	res.render("500")

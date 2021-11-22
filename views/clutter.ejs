@@ -23,16 +23,31 @@
 		<%- include("player") -%><br>
 		<span id="date">
 			<%- dateP -%>
-		</span> <a href="/edit/<%= id %>"><button>See Inside</button></a><br>
+		</span> <a href="/edit/<%= id %>"><button>See Inside</button></a> <button onclick="embedDispaly('block')">Embed</button><br>
 		<input type="text" id="commentBox"></input> <button>Submit</button>
 		<div id="comments">
 		</div>
+	</div>
+	<div id="embed">
+		<div style="text-align:right"><button class="xOut" onclick="embedDispaly('none')">X</button></div>
+		<input value="<iframe src='https://clutter.stevesgreatness.repl.co/embed/<%- id -%>' width='700' height='450'></iframe>" readonly id="embedHTML"><br><button onclick="copyText(document.getElementById('embedHTML'))">Copy Text</button>
 	</div>
 	<%- include("footer") -%>
 	<script src="/script.js"></script>
 	<script>
 		var projects = <%- JSON.stringify(proj) -%>;
 		renderClutter(projects)
+		function embedDispaly(value) {
+			document.getElementById("embed").style.display = value
+		}
+		function copyText(element) {
+			selectTxt(element)
+			document.execCommand("copy")
+		}
+		function selectTxt(element) {
+			element.select()
+			element.setSelectionRange(0, 99999)
+		}
 	</script>
 </body>
 

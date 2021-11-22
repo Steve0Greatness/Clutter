@@ -37,7 +37,7 @@
 		<% if (isPre == false) { %>
 		<button onclick="shareProject()">Share</button>
 		<input type="text" id="clutterName" placeholder="Clutter Name">
-		<input type="number" placeholder="Project's Thumbnail Shown" id="thumbnailNum">
+		<input type="number" placeholder="Project's Thumbnail Shown" id="thumbnailNum" value="1">
 		<% } else { %>
 		<button onclick="shareProject()">Remix & Share</button>
 		<a href="/clutters/<%= id %>"><button>See Page</button></a>
@@ -87,8 +87,8 @@
 				})
 					.then(res => res.json())
 					.then(data => {
-						console.log(data)
-						//location = "/projects/" + data["id"]
+						//console.log(data)
+						location = "/projects/" + data["id"]
 					})
 			}
 		}

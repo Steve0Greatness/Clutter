@@ -23,6 +23,7 @@
 	--commentboxBackground: #444;
 	--commentLink: #00f;
 	--commentUsera: #fff;
+	--embedBack: #ececec;
 	font-family: sans-serif;
 }
 
@@ -255,6 +256,23 @@ table.viewTable th {
 	padding-top: .5em;
 	padding-bottom: 1em;
 	margin-bottom: .25em;
-	height: auto;
-	min-height: 55%;
+	&#content {
+		height: auto;
+		min-height: 55%;
+	}
+}
+
+/*CLUTTER PAGE*/
+#embed {
+	position: fixed;
+	top: 40%;
+	left: 45%;
+	background: var(--embedBack);
+	width: 15em;
+	height: 15em;
+	padding: 15px;
+	display: none;
+}
+.xOut {
+	border-radius: 15px;
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en-US">
 
 <head>
 	<link rel="stylesheet" href="/style.css">
@@ -14,12 +14,15 @@
 	<%- include("header") -%>
 	<div id="content">
 	<h1>Debug Pages</h1>
-	<p>Test pages, for testing out designs for pages that can't normally be seen</p>
+	<p>Test pages, for testing out designs for pages that can't normally be seen. This has nothing to do with the API, you can find it's docs in the footer or via <a href="/api/docs">this link</a></p>
 	<ul>
-		<li><a href="/debug/500">500</a>: test the internal server issue page</li>
-		<li><a href="/debug/404">404</a>: test the not found page</li>
+		<li><a href="500">500</a>: test the internal server issue page</li>
+		<li><a href="404">404</a>: test the not found page(<a href="really-long-path-to-the-404-page">really long link</a>, <a href="project-404">Clutter 404</a>)</li>
+		<li><a href="javascript:0">Unvisited link</a>: this link will never be visited, it has <em>0</em> output 😏</li>
+		<li><a href="/clutters/1">Debug Clutter</a>: Clutter for testing things out(note: it's just the first Clutter)</li>
 	</ul>
 	</div>
+	<script src="/script.js"></script>
 	<%- include("footer") -%>
 </body>
 
