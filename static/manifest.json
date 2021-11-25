@@ -3,12 +3,12 @@
 	"name": "Clutter -- Compile Scratch Projects",
 	"icons": [
 		{
-			"src": "/img/clutterIcon.png",
+			"src": "/img/clutterIcon.svg",
 			"type": "image/png",
 			"sizes": "512x512"
 		},
 		{
-			"src": "/img/ClutterMask.png",
+			"src": "/img/ClutterIcon.svg",
 			"type": "image/png",
 			"sizes": "52x52",
 			"purpose": "any maskable"

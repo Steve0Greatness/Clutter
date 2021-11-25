@@ -1,20 +1,30 @@
 <!DOCTYPE html>
+<%# Type: dynamic
+		Catorgory: search %>
 <html lang="en-US">
 
 <head>
-	<link rel="stylesheet" href="/style.css">
 	<title>Clutter -- Searching: <%= q %></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Search">
-	<meta name="theme-color" content="#5555ff">
-	<link rel="manifest" href="/manifest.json">
-	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<%- include("headTag") -%>
 </head>
 
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		Searcing doesn't really work... afterall, there's no projects to search.
+		Searching for <%- q -%>, found <%- returned.length -%><br>
+		<% if (returned.length == 0) { %>
+		Looks like what you searched for returned nothing...
+		<% } else { %>
+		<% returned.forEach(elm => { %>
+		<div class="project">
+				<a href="/clutters/1">
+					<img src="/api/clutters/<%- elm["id"] -%>/thumbnail.png" width="120" alt="<%- elm["name"] -%>'s Thumbnail"><br>
+					<%- elm["name"] -%>
+					</a><br>
+					<a href="/users/<%- elm["creator"] -%>" style="font-size:10px"><%- elm["creator"] -%></a>
+			</div>
+		<% }) %>
+		<% } %>
 	</div>
 	<%- include("footer") -%>
 	<script src="/script.js"></script>

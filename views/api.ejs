@@ -1,14 +1,11 @@
 <!DOCTYPE html>
+<%# Type: static
+		Catorgory: info %>
 <html lang="en-US">
 
 <head>
-	<link rel="stylesheet" href="/style.css">
-	<title>Clutter -- API docs</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="API docs">
-	<meta name="theme-color" content="#5555ff">
-	<link rel="manifest" href="/manifest.json">
-	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<title>clutters -- API docs</title>
+	<%- include("headTag") -%>
 </head>
 
 <body>
@@ -16,10 +13,10 @@
 	<div id="content">
 		<h1>API</h1>
 		These are the docs for the API(the backend isn't set up, so it only return debug data right now). All of them are under the endpoint <span class="code">/<span class="inner">api</span>/</span>, and return <a href="https://www.json.org/json-en.html">JSON</a> files.
-		<h2 id="Clutter">Clutter Info</h2>
-		Get data on Clutters<br>
-		Please note that as of currently, It only returns info about the debug Clutter.
-		<div class="code">/<span class="inner">api</span>/<span class="inner">clutter</span>/<span class="quote">:</span><span class="number">id</span></div>
+		<h2 id="clutters">Clutter Info</h2>
+		Get data on clutterss<br>
+		Please note that as of currently, It only returns info about the debug clutters.
+		<div class="code">/<span class="inner">api</span>/<span class="inner">clutters</span>/<span class="quote">:</span><span class="number">id</span></div>
 		Example response:
 		<div class="code">
 			{
@@ -27,23 +24,49 @@
   			<span class="quote">"name"</span>: <span class="quote">"name:)"</span>,<br>
   			<span class="quote">"creator"</span>: <span class="quote">"Steve0Greatness"</span>,<br>
   			<span class="quote">"included"</span>: [<span class="quote">"588586405"</span>, <span class="quote">"487519987"</span>],<br>
-  			<span class="quote">"date"</span>: [<span  class="quote">"Sat"</span>, <span class="quote">"Nov"</span>, <span class="number">13</span>, <span class="number">2021</span>],<br>
+  			<span class="quote">"date"</span>: <span class="quote">"Sat, Nov 13 2021"</span>,<br>
   			<span class="quote">"thumb"</span>: <span class="number">0</span>,<br>
   			<span class="quote">"id"</span>: <span class="number">1</span>,<br>
   			<span class="quote">"remix"</span>: [<span class="inner">true</span>, <span class="quote">"2"</span>, <span class="quote">"S0G"</span>, <span class="quote">"Yes?"</span>]</div>
 			}
 		</div>
+		<h3 id="clutters-Comments">Comments</h3>
+		Doesn't work yet, comments don't exist.
+		<div class="code">/<span class="inner">api</span>/<span class="inner">clutters</span>/<span class="quote">:</span><span class="number">id</span>/<span class="inner">comments</span></div>
+		Example response:
+		<div class="code">
+			{
+			<div style="margin-left:1em">
+				<span class="quote">"notice"</span>: <span class="quote">"Comments can't currently be read"</span>,<br>
+				<span class="quote">"error"</span>: <span class="quote">"NotYours"</span>
+  		</div>
+			}
+		</div>
+		<h3 id="clutters-Thumbnail">Thumbnail</h3>
+		<div class="code">/<span class="inner">api</span>/<span class="inner">clutters</span>/<span class="quote">:</span><span class="number">id</span>/<span class="inner">thumbnail.png</span></div>
+		Returns the PNG of the thumbnail
 		<h2 id="User">User Info</h2>
 		Users don't have info yet
-		<div class="code">/<span class="inner">api</span>/<span class="inner">user</span>/<span class="quote">:</span><span class="number">name</span></div>
+		<div class="code">/<span class="inner">api</span>/<span class="inner">users</span>/<span class="quote">:</span><span class="number">name</span></div>
 		Example response:
 		<div class="code">
 			{<div style="margin-left:1em">
-  			<span class="quote">"notice"</span>: <span class="quote">"Users don't have data in the backend yet, only clutters"</span>,<br>
-  			<span class="quote">"error"</span>: <span class="quote">"NotYours"</span></div>
-			}
-		</div>
-		<h2 id="Featured">Featured Clutters</h2>
+  			<span class="quote">"name"</span>: <span class="quote">"Steve0Greatness"</span>,<br>
+				<span class="quote">"id"</span>: <span class="number">61820378</span>,<br>
+  			<span class="quote">"clutterss"</span>: [<div style="margin-left:1em">
+					<span class="quote">"name"</span>: <span class="quote">"name:)"</span>,<br>
+  			<span class="quote">"creator"</span>: <span class="quote">"Steve0Greatness"</span>,<br>
+  			<span class="quote">"included"</span>: [<span class="quote">"588586405"</span>, <span class="quote">"487519987"</span>],<br>
+  			<span class="quote">"date"</span>: <span class="quote">"Sat, Nov 13 2021"</span>,<br>
+  			<span class="quote">"thumb"</span>: <span class="number">0</span>,<br>
+  			<span class="quote">"id"</span>: <span class="number">1</span>,<br>
+  			<span class="quote">"remix"</span>: [<span class="inner">true</span>, <span class="quote">"2"</span>, <span class="quote">"S0G"</span>, <span class="quote">"Yes?"</span>]</div>
+				]</div>
+			}</div>
+			<h3 id="User-avartar">Avartar</h3>
+			<div class="code">/<span class="inner">api</span>/<span class="inner">users</span>/<span class="quote">:</span><span class="number">name</span>/<span class="inner">avartar.png</span></div>
+			Returns the PNG of the user
+			<h2 id="Featured">Featured clutterss</h2>
 		<div class="code">/<span class="inner">api</span>/<span class="inner">featured</span></div>
 		Example response:
 		<div class="code">
@@ -52,7 +75,7 @@
   			<span class="quote">"name"</span>: <span class="quote">"name:)"</span>,<br>
   			<span class="quote">"creator"</span>: <span class="quote">"Steve0Greatness"</span>,<br>
   			<span class="quote">"included"</span>: [<span class="quote">"588586405"</span>, <span class="quote">"487519987"</span>],<br>
-  			<span class="quote">"date"</span>: [<span  class="quote">"Sat"</span>, <span class="quote">"Nov"</span>, <span class="number">13</span>, <span class="number">2021</span>],<br>
+  			<span class="quote">"date"</span>: <span class="quote">"Sat, Nov 13 2021"</span>,<br>
   			<span class="quote">"thumb"</span>: <span class="number">0</span>,<br>
   			<span class="quote">"id"</span>: <span class="number">1</span>,<br>
   			<span class="quote">"remix"</span>: [<span class="inner">true</span>, <span class="quote">"2"</span>, <span class="quote">"S0G"</span>, <span class="quote">"Yes?"</span>]</div>
@@ -60,6 +83,7 @@
 			...]
 		</div>
 	</div>
+		</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
 </body>

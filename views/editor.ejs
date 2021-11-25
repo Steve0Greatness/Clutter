@@ -1,18 +1,16 @@
 <!DOCTYPE html>
+<%# Type: dynamic
+		Catorgory: clutter %>
 <html lang="en-US">
 
 <head>
-	<link rel="stylesheet" href="/style.css">
 	<% if (isPre == false) { %>
 	<title>Clutter -- Create</title>
 	<% } else { %>
 	<title>Clutter -- Editing: <%= cName %></title>
 	<% } %>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="The Clutter editor">
-	<meta name="theme-color" content="#5555ff">
-	<link rel="manifest" href="/manifest.json">
-	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<%- include("headTag") -%>
 </head>
 
 <body>
@@ -22,7 +20,7 @@
 	<div class="contentEditor" id="content">
 		<!--editing part of the editor-->
 		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button><br>
-		<% if (isPre == false) { %>
+		<% if (!(isPre)) { %>
 		<form id="projectIds" onsubmit="return false">
 			<input type="text" placeholder="add link to a shared Scratch project."><br>
 		</form>
@@ -34,7 +32,7 @@
 		</form>
 		<% } %><br><br>
 		<!--information about the project for sharing-->
-		<% if (isPre == false) { %>
+		<% if (!(isPre)) { %>
 		<button onclick="shareProject()">Share</button>
 		<input type="text" id="clutterName" placeholder="Clutter Name">
 		<input type="number" placeholder="Project's Thumbnail Shown" id="thumbnailNum" value="1">
@@ -51,6 +49,9 @@
 		submitClutter()
 		<% } %>
 		function shareProject() {
+			window.addEventListener('beforeunload', (unload) => {
+				  delete unload['returnValue']
+			})
 			if (localStorage.getItem("user") == null|undefined) {
 				alert("you must be logged in to share a project")
 			} else {
@@ -69,16 +70,31 @@
 						}
 						formValues.push(curdata)
 					} else {
+					window.addEventListener('beforeunload', (unload) => {
+  					unload.preventDefault(); 
+  					unload.returnValue = '';
+					})
 						alert("Something doesn't seem right about the project at spot " + i + ". Please make sure it's a full project url.")
 						return;
 					}
 				}
+				let isEdit = false
+				<% if (isPre) { %>
+				if (checkLogin() == <%- JSON.stringify(creator) -%>) {
+					isEdit = true
+				}
+				var originalId = <%- JSON.stringify(id) -%>
+				<% } else { %>
+				var originalId = null
+				<% } %>
 				var data = {
 					name: document.getElementById("clutterName").value,
 					thumb: document.getElementById("thumbnailNum").value - 1,
 					included: formValues,
 					creator: localStorage.getItem("user"),
-					<% if (isPre) { %>remix: [true, <%- JSON.stringify(id) -%>, <%- JSON.stringify(creator) -%>, <%- JSON.stringify(cName) -%>]<% } else { %>remix: [false, "", "", ""]<% } %>
+					<% if (isPre) { %>remix: [true, <%- JSON.stringify(id) -%>, <%- JSON.stringify(creator) -%>, <%- JSON.stringify(cName) -%>]<% } else { %>remix: [false, "", "", ""]<% } %>,
+					isEdit: isEdit,
+					originalId: originalId
 				}
 				fetch("/post/clutter", {
 					method: 'PUT',
@@ -88,10 +104,14 @@
 					.then(res => res.json())
 					.then(data => {
 						//console.log(data)
-						location = "/projects/" + data["id"]
+						location = "/clutters/" + data["id"]
 					})
 			}
 		}
+		window.addEventListener('beforeunload', (unload) => {
+  		unload.preventDefault()
+		  unload.returnValue = '';
+		})
 	</script>
 </body>
 

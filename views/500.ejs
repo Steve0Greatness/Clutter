@@ -1,21 +1,18 @@
 <!DOCTYPE html>
+<%# Type: static
+		Catorgory: error %>
 <html lang="en-US">
 
 <head>
-	<link rel="stylesheet" href="/style.css">
-	<title>Clutter -- Not Found</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Not found.">
-	<meta name="theme-color" content="#5555ff">
-	<link rel="manifest" href="/manifest.json">
-	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<title>Clutter -- Internal Error</title>
+	<%- include("headTag") -%>
 </head>
 
 <body>
 	<%- include("header") -%>
 	<div id="content">
 	<center id="notfound">
-		<img src="/img/Ghosty.svg" width="450" id="ghosty">
+		<img src="/img/errors/Ghosty.svg" width="450" id="ghosty">
 		<h1>Error 500 - Internal Server Error</h1>
 		Don't worry, you didn't do anything wrong. This is just an issue with the server.<br>
 	</center>

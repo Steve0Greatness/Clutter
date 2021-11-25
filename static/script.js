@@ -102,21 +102,22 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 	fetch("https://fluffyscratch.hampton.pw/auth/verify/v2/" + location.searchtree["privateCode"])
 		.then(blob => blob.json())
 		.then(data => {
-			if (data["valid"] == true) {
+			if (data["valid"]) {
 				//check if valid
 				let user = data["username"]
-				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25"></a>`
+				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25"></a>`
+				localStorage.setItem("login", location.searchtree["privateCode"])
 				localStorage.setItem("user", user)
 			} else if (userIsnt) {
 				//otherwise, check if they're logged in already
 				let user = localStorage.getItem("user")
-				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25" height="25"></a>`
+				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
 			} else { login.innerHTML = loginLink }
 		})
 } else if (userIsnt) {
 	//if the user has a logged in cookie, show that they are logged in.
 	let user = localStorage.getItem("user")
-	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.png" alt="logout" width="25" height="25"></a>`
+	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
 } else { login.innerHTML = loginLink }
 
 function checkLogin() {
@@ -135,5 +136,5 @@ function logout() {
 
 /*Relating to Searching*/
 function searchBar(searchText) {
-	location = "/search/?q=" + searchText
+	location = "/search?q=" + searchText
 }

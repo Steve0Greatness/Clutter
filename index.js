@@ -5,10 +5,10 @@ const favicon = require('serve-favicon')
 const path = require("path")
 const Database = require("@replit/database")
 const db = new Database()
-const user = new Database()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const less = require('less-middleware')
+const request = require('request')
 const port = 3000
 const testProject = {
 	name: "name:)",
@@ -70,25 +70,26 @@ app.get('/clutters/:id', (req, res) => {
 		let key = JSON.parse(value)
 		res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
 	}).catch(error => {
-		console.log("error")
 		res.render("404", { path: id, type: 1 })
 	})
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
 	let clutters = []
-	db.list().then(keys => {
-		for (var i in keys) {
-			db.get(String(keys[i])).then(value => {
-				let data = JSON.parse(value)
-				if (data["creator"].toUpperCase() == name.toUpperCase()) {
-					clutters.push(data)
-				}
-			})
-		}
-		setTimeout(function() {
-			res.render("user", { name: name, made: clutters })
-		}, 500)
+	request.get("https://scratchdb.lefty.one/v3/user/info/" + name, { json: true }, (err, resp, body) => {
+		db.list().then(keys => {
+			for (var i in keys) {
+				db.get(String(keys[i])).then(value => {
+					let data = JSON.parse(value)
+					if (data["creator"].toUpperCase() == name.toUpperCase()) {
+						clutters.push(data)
+					}
+				})
+			}
+			setTimeout(function() {
+				res.render("user", { name: body["username"], made: clutters, id: body["id"] })
+			}, 250)
+		})
 	})
 })
 app.get("/about", (req, res) => {
@@ -115,7 +116,18 @@ app.get("/about", (req, res) => {
 app.get("/getstarted", (req, res) => { res.render("getStarted") })
 app.get("/search", (req, res) => {
 	let search = req.query.q
-	res.render("search", { q: search })
+	let clutters = []
+	db.list().then(keys => {
+		for (let i = 1; i < keys.length + 1; i++) {
+			db.get(String(i)).then(value => {
+				let parsedValue = JSON.parse(value)
+				if (parsedValue["name"].toUpperCase().includes(search.toUpperCase()) || parsedValue["creator"].toUpperCase().includes(search.toUpperCase())) { clutters.push(parsedValue) }
+			})
+		}
+		setTimeout(function() {
+			res.render("search", { q: search, returned: clutters })
+		}, keys.length * 200)
+	})
 })
 app.get("/embed/:id", cors(), (req, res) => {
 	let id = req.params.id
@@ -123,49 +135,62 @@ app.get("/embed/:id", cors(), (req, res) => {
 		let key = JSON.parse(value)
 		res.render('embed', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
 	}).catch(error => {
-		console.log("error")
+
 		res.render("404", { path: id, type: 1 })
 	})
 })
 
 //api(note, this would have been a subdomain but replit doesn't support them)
 app.get("/api/docs", cors(), (req, res) => { res.render("api") })
-app.get("/api/clutter/:id", cors(), (req, res) => {
+app.get("/api/clutters/:id", cors(), (req, res) => {
 	let id = req.params.id
 	db.get(id).then(value => {
 		res.send(JSON.parse(value))
 	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
 })
-app.get("/api/clutter/:id/comments", cors(), (req, res) => {
+app.get("/api/clutters/:id/comments", cors(), (req, res) => {
 	let id = req.params.id
 	db.get(id).then(value => {
-		res.send({ notice: "Comments can't currently be read", error: "NotYours"})
+		res.send({ notice: "Comments can't currently be read", error: "NotYours" })
 	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
 })
-app.get("/api/clutter/:id/thumbnail", cors(), (req, res) => {
+app.get("/api/clutters/:id/thumbnail.png", cors(), (req, res) => {
 	let id = req.params.id
 	db.get(id).then(value => {
-		let i = JSON.parse(value)
-		res.send(i["included"][i["thumb"]])
+		let parse = JSON.parse(value)
+		res.statusCode = 302;
+		res.setHeader("Location", "https://uploads.scratch.mit.edu/projects/thumbnails/"+ parse["included"][parse["thumb"]] + ".png")
+		res.end();
 	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
 })
-app.get('/api/user/:name', cors(), (req, res) => {
+app.get('/api/users/:name', cors(), (req, res) => {
 	let name = req.params.name
 	let clutters = []
-	db.list().then(keys => {
-		for (var i in keys) {
-			db.get(String(keys[i])).then(value => {
-				let data = JSON.parse(value)
-				if (data["creator"].toUpperCase() == name.toUpperCase()) {
-					clutters.push(data)
-				}
-			})
-		}
-		setTimeout(function() {
-			let sendObject = { name: name, clutters: clutters}
-			res.send(sendObject)
-			console.log(sendObject)
-		}, 1000)
+	request.get("https://scratchdb.lefty.one/v3/user/info/" + name, { json: true }, (err, resp, body) => {
+		db.list().then(keys => {
+			for (var i in keys) {
+				db.get(String(keys[i])).then(value => {
+					let data = JSON.parse(value)
+					if (data["creator"].toUpperCase() == name.toUpperCase()) {
+						clutters.push(data)
+					}
+				})
+			}
+			setTimeout(function() {
+				let sendObject = { name: body["username"], id: body["id"], clutters: clutters }
+				res.send(sendObject)
+			}, 250)
+		})
+	})
+})
+app.get('/api/users/:name/avartar.png', cors(), (req, res) => {
+	let name = req.params.name
+	let clutters = []
+	request.get("https://scratchdb.lefty.one/v3/user/info/" + name, { json: true }, (err, resp, body) => {
+		let id = body["id"]
+		res.statusCode = 302;
+		res.setHeader("Location", "https://uploads.scratch.mit.edu/users/avatars/" + id + ".png")
+		res.end();
 	})
 })
 app.get("/api/featured", cors(), (req, res) => {
@@ -181,8 +206,11 @@ app.put("/post/clutter", cors(corsOptions), (req, res) => {
 	let date = new Date()
 	finalDate = `${daysOfTheWeek[date.getDay()]}, ${monthsOfTheYear[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`
 	data["date"] = finalDate
-	db.list().then(keys => data["id"] = Number(keys[keys.length - 1]) + 1)
+	if (data["isEdit"]) { data["id"] = data["originalId"] } else { db.list().then(keys => data["id"] = Number(keys[keys.length - 1]) + 1) }
+	data["originalId"] = null
 	setTimeout(function() {
+		let dbData = JSON.stringify(data)
+		//db.set(String(data["id"]), dbData)
 		res.send(data)
 	}, 1000)
 })
@@ -190,6 +218,11 @@ app.put("/post/comment", cors(corsOptions), (req, res) => {
 	let data = req.body
 	console.log(data)
 })
+app.put("/post/loginReq", cors(corsOptions), (req, res) => {
+	var randomB64 = Math.random().toString(16).substr(2, 16)
+	res.send(randomB64)
+})
+
 
 //debug pages
 app.get("/debug/", (req, res) => {
@@ -212,7 +245,7 @@ app.use(function(err, req, res, next) {
 })
 
 //listening for a sever connection
-app.listen(port)
+app.listen(port, () => { })
 
 /*
 inorder to use arrays, objects, and strings in static ejs files, use JSON.stringify(varName)

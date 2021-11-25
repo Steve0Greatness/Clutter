@@ -1,23 +1,21 @@
 <!DOCTYPE html>
+<%# Type: dynamic
+		Catorgory: user %>
 <html lang="en-US">
 
 <head>
-	<link rel="stylesheet" type="text/css" href="/style.css">
 	<title>Clutter -- @<%- name -%></title>
 	<meta name="title" content="Clutter -- @<%- name -%>">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="A Clutter user">
-	<meta name="theme-color" content="#5555ff">
-	<link rel="manifest" href="/manifest.json">
-	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<%- include("headTag") -%>
 </head>
 
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		<a target="_new" id="userLink" title="Link to Scratch" href>
+		<a target="_new" id="userLink" title="Link to Scratch" href="//scratch.mit.edu/users/<%- name -%>">
 		<table>
-			<tr><td><img src id="userAvatar"></td><td id="userName"><%- name -%></td></tr>
+			<tr><td><img src="/api/users/<%- name -%>/avartar.png" id="userAvatar"></td><td id="userName"><%- name -%></td></tr>
 		</table>
 		</a>
 		<!--<div class="block" style="display: inline-block;"><div class="head">Featured Clutter</div></div><br><br>-->
@@ -28,7 +26,7 @@
 			<% for (let i = 0; i < made.length; i++) { %>
 				<div class="project">
 				<a href="/clutters/1">
-					<img src="https://uploads.scratch.mit.edu/projects/thumbnails/<%- made[i]["included"][made[i]["thumb"]] -%>.png" width="120" alt="<%- made[i]["name"] -%>'s Thumbnail"><br>
+					<img src="/api/clutters/<%- made[i]["id"] -%>/thumbnail.png" width="120" alt="<%- made[i]["name"] -%>'s Thumbnail"><br>
 					<%- made[i]["name"] -%>
 					</a><br>
 					<a href="/users/<%- made[i]["creator"] -%>" style="font-size:10px"><%- made[i]["creator"] -%></a>
@@ -41,19 +39,6 @@
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
-	<script>
-		const pageTitle = document.getElementsByTagName("title")[0]
-		const userAvatar = document.querySelector("#userAvatar")
-		const userLink = document.querySelector("#userLink")
-		userLink.href = `//scratch.mit.edu/users/${<%- JSON.stringify(name) -%>}`
-		fetch("//cors.9gr.repl.co/api.scratch.mit.edu/users/" + <%- JSON.stringify(name) -%>)
-			.then(blob => blob.json())
-			.then(data => {
-				let avatar = `//uploads.scratch.mit.edu/users/avatars/${data["id"]}.png`
-				userAvatar.src = avatar
-			})
-		console.log(<%- JSON.stringify(made) -%>)
-	</script>
 </body>
 
 </html>

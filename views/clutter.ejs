@@ -1,15 +1,14 @@
 <!DOCTYPE html>
+<%# Type: dynamic
+		Catorgory: clutter %>
 <html lang="en-US">
 
 <head>
-	<link rel="stylesheet" href="/style.css">
 	<title>Clutter -- <%= cName %></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="<%- cName -%> on Clutter">
 	<meta name="title" content="Clutter -- <%- cName -%>">
-	<meta name="theme-color" content="#5555ff">
-	<link rel="manifest" href="/manifest.json">
-	<link rel="apple-touch-icon" href="/img/clutterIcon.png">
+	<%- include("headTag") -%>
+	<%- include("socialClutters") -%>
 </head>
 
 <body>
@@ -35,11 +34,16 @@
 	<%- include("footer") -%>
 	<script src="/script.js"></script>
 	<script>
+		//render
 		var projects = <%- JSON.stringify(proj) -%>;
 		renderClutter(projects)
+
+		//embed
 		function embedDispaly(value) {
 			document.getElementById("embed").style.display = value
 		}
+
+		//text coping
 		function copyText(element) {
 			selectTxt(element)
 			document.execCommand("copy")
@@ -49,10 +53,10 @@
 			element.setSelectionRange(0, 99999)
 		}
 	</script>
-</body>
-
-</html>
-<!--<div class="comment">
+	<!--<div class="comment">
 				<div class="commentUser"><a href="/users/<user>"><user></a></div>
 				<body>
 			</div>-->
+</body>
+
+</html>
