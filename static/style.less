@@ -31,6 +31,10 @@ details > summary {
 	cursor: pointer;
 }
 
+::selection {
+	background: #4d97ff35;
+}
+
 /*API*/
 div.code {
 	font-family: monospace;
@@ -70,7 +74,6 @@ header#head {
 	padding: .25em;
 	text-align: center;
 	font-size: 1.5em;
-	
 	a {
 		margin-left: .5em;
 		margin-right: .5em;
@@ -88,8 +91,6 @@ header#head {
 		background-repeat: no-repeat;
 		transition: .15s ease all;
 		&:hover {
-			//padding-left: 43px;
-			//margin-left: 8px;
 			background-size: 90%;
 			background-position: 5px 2px;
 		}
@@ -116,6 +117,9 @@ a:any-link {
 	color: #055;
 	&:visited {
 		color: #00a;
+	}
+	&:active {
+		color: #50a;
 	}
 }
 
@@ -155,6 +159,10 @@ footer#foot {
 	margin-top: 1em;
 }
 
+ul.noList li {
+	list-style: none;
+}
+
 /*Inputs*/
 input, button {
 	color: var(--inputText);
@@ -176,6 +184,10 @@ iframe {
 	color: var(--primaryText);
 	border: none;
 	padding: 12px;
+	&::placeholder {
+  	font-size: 1em;
+  	color: #ccc;
+	}
 }
 
 #player {

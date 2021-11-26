@@ -1,0 +1,28 @@
+<!doctype html>
+<%# Type: ?
+		Catorgory: error %>
+<html>
+
+<head>
+	<title>Clutter -- Access Denied</title>
+	<%- include("headTag") -%>
+</head>
+
+<body>
+	<%- include("header") -%>
+	<div id="content">
+		<center id="notfound">
+		<img src="/img/errors/BlueBird.jpeg" id="BlueBird" width="600">
+		<h1>403 - Access Denied</h1>
+		You aren't allowed to be here. How do I know? A little birdy told me.</center>
+	</div>
+	<%- include("footer") -%>
+	<script type="text/javascript" src="/script.js"></script>
+	<script>
+		if (screen.width < 450) {
+			document.getElementById("BlueBird").width = screen.width - 30
+		}
+	</script>
+</body>
+
+</html>

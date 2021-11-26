@@ -45,7 +45,8 @@ var clutter = []
 function renderClutter(array) {
 	console.log(array, `this should repeat ${array.length} time(s)`)
 	clutter = []
-	for (let i = 0; i < array.length; i++) { clutter.push(`//turbowarp.org/${array[i]}` )
+	for (let i = 0; i < array.length; i++) {
+		clutter.push(`//turbowarp.org/${array[i]}`)
 	}
 	console.log(clutter)
 	let cluttero = clutter[0]
@@ -94,7 +95,7 @@ function getLoginURL() {
 
 var loginLink = `<a href="${getLoginURL()}">Login with FluffyScratch</a>`
 var login = document.getElementById("login")
-var userIsnt = localStorage.getItem("user") != null|''
+var userIsnt = localStorage.getItem("user") != null | ''
 
 //check if they have logged in already
 if (Object.keys(location.searchtree).includes("privateCode")) {
@@ -106,32 +107,67 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 				//check if valid
 				let user = data["username"]
 				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25"></a>`
-				localStorage.setItem("login", location.searchtree["privateCode"])
+				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + 1), 'utf-8'))
 				localStorage.setItem("user", user)
 			} else if (userIsnt) {
 				//otherwise, check if they're logged in already
-				let user = localStorage.getItem("user")
-				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
+				setLogin()
 			} else { login.innerHTML = loginLink }
 		})
 } else if (userIsnt) {
 	//if the user has a logged in cookie, show that they are logged in.
-	let user = localStorage.getItem("user")
-	login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
+	setLogin()
 } else { login.innerHTML = loginLink }
 
 function checkLogin() {
 	let user = ""
-	if (localStorage.getItem("user") != null|undefined) {
+	if (localStorage.getItem("user") != null | undefined) {
 		user = localStorage.getItem("user")
 	}
 	return user
+}
+
+function setLogin() {
+	let user = localStorage.getItem("user")
+	let logina = localStorage.getItem("login")
+	fetch("/post/loginReq", {
+		method: "PUT",
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ want: user, c: logina })
+	})
+		.then(res => res.text())
+		.then(data => {
+			if (data != '') {
+				login.innerHTML = `<a href="/users/${data}">${data}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
+			} else {
+				logout()
+			}
+			//console.log(data)
+		})
+}
+
+const charAppears = (char, inside) => {
+	let ammount = 0
+	inside.split(char).forEach(elm => {
+		if (elm == '') {
+			ammount++
+		}
+	})
+	return ammount
+}
+
+const toBinary = (str = '') => {
+  let res = str.split('').map(char => {
+    return char.charCodeAt(0).toString(2);
+  }).join(' ');
+  return res;
 }
 
 //log them out
 function logout() {
 	login.innerHTML = loginLink
 	localStorage.removeItem("user")
+	localStorage.removeItem("login")
 }
 
 /*Relating to Searching*/

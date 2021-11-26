@@ -7,10 +7,12 @@
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<%- include("player") -%><a href="/clutters/<%- id -%>">Original</a>
+<%- include("player") -%><a href="/clutters/<%- id -%>" target="_parent">View <%- cName -%> on Clutter</a> | <a href id="curScratchProjectLink" target="_parent">View current project on Scratch</a>(<a href id="curTurbowarpProjectLink" target="_parent">Turbowarp</a>)
 <script>
 var clutter = []
+var originalIds = []
 function renderClutter(array) {
+	originalIds = array
 	console.log(array, `this should repeat ${array.length} time(s)`)
 	clutter = []
 	for (let i = 0; i < array.length; i++) { clutter.push(`//turbowarp.org/${array[i]}` )
@@ -19,20 +21,22 @@ function renderClutter(array) {
 	let cluttero = clutter[0]
 	let embed = checkForSlash(cluttero)
 	document.getElementById("iframe").src = clutter[0] + embed
+	document.getElementById("curScratchProjectLink").href = "//scratch.mit.edu/projects/" + originalIds[0]
+	document.getElementById("curTurbowarpProjectLink").href = "//turbowarp.org/" + originalIds[0]
 }
 
 function nextProject(array) {
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let next = array[current + 1]
 	console.log(next)
-	document.getElementById("iframe").src = next + checkForSlash(next)
+	alsoSet(current + 1, next)
 }
 
 function lastProject(array) {
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let last = array[current]
 	console.log(last)
-	document.getElementById("iframe").src = last + checkForSlash(last)
+	alsoSet(current, last)
 }
 
 function checkForSlash(url) {
@@ -48,6 +52,12 @@ function checkForSlashTF(url) {
 	} else {
 		return false
 	}
+}
+
+function alsoSet(num, vari) {
+	document.getElementById("iframe").src = vari + checkForSlash(vari)
+	document.getElementById("curScratchProjectLink").href = "//scratch.mit.edu/projects/" + originalIds[num]
+	document.getElementById("curTurbowarpProjectLink").href = "//scratch.mit.edu/projects/" + originalIds[num]
 }
 renderClutter(<%- JSON.stringify(proj) -%>)
 </script>

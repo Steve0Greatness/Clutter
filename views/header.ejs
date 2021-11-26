@@ -1,11 +1,11 @@
 <%# Type: static
 		Catorgory: element %>
 <header id="head">
-<a href="/" id="logo" alt="clutter"></a>
+<a href="/" id="logo" title="clutter" name="clutter" alt="clutter"></a>
 <a href="/create">Create</a>
 <a href="/about">About</a>
 <a href="/getstarted">Get Started</a>
 <form onsubmit="searchBar(document.getElementById('searchText').value); return false;" style="display:inline-block">
-<input name="search" type="text" class="search" id="searchText" alt="search"><input type="submit" class="search" value="Search"></form>
+<lable for="searchText"><input type="submit" class="search" value="Search"></lable><input name="search" placeholder="Search" type="text" class="search" id="searchText" alt="search"></form>
 <span id="login"></span>
 </header>

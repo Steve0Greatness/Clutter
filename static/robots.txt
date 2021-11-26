@@ -1,10 +1,12 @@
 # start of file
-user-agent: *
-disallow: /sendData
+user-agent: 
+disallow: /post/
 disallow: /search
-disallow: /api
+disallow: /api/
 disallow: /edit/
 disallow: /create
+disallow: /debug/
+disallow: /embed/
 allow: /users/
 allow: /clutters/
 allow: /

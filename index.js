@@ -29,8 +29,24 @@ const corsOptions = {
 			callback(null, true)
 		} else {
 			callback(new Error('Not allowed by CORS'))
+			res.render("403")
 		}
 	}
+}
+const toBinary = (str = '') => {
+  let res = str.split('').map(char => {
+    return char.charCodeAt(0).toString(2);
+  }).join(' ');
+  return res;
+}
+const charAppears = (char, inside) => {
+	let ammount = 0
+	inside.split(char).forEach(elm => {
+		if (elm == '') {
+			ammount++
+		}
+	})
+	return ammount
 }
 
 //setting the view engine
@@ -218,9 +234,15 @@ app.put("/post/comment", cors(corsOptions), (req, res) => {
 	let data = req.body
 	console.log(data)
 })
-app.put("/post/loginReq", cors(corsOptions), (req, res) => {
-	var randomB64 = Math.random().toString(16).substr(2, 16)
-	res.send(randomB64)
+app.put("/post/loginReq", cors(), (req, res) => {
+	let loginWant = req["body"]["want"]
+	let loginBase64 = req["body"]["c"]
+	let binary = Buffer.from(String(charAppears("1", toBinary(loginWant)) + 1), 'utf-8').toString('base64')
+	if (binary == loginBase64) {
+		res.send(loginWant)
+	} else {
+		res.send('')
+	}
 })
 
 
@@ -229,10 +251,13 @@ app.get("/debug/", (req, res) => {
 	res.render("debugindex")
 })
 app.get("/debug/project-404", (req, res) => {
-	res.render("404", { path: 0, type: 1 })
+	res.render("404", { path: 606852261, type: 1 })
 })
 app.get("/debug/500", (req, res) => {
 	res.render("500")
+})
+app.get("/debug/403", (req, res) => {
+	res.render("403")
 })
 
 //errors
@@ -242,6 +267,10 @@ app.use(function(req, res) {
 app.use(function(err, req, res, next) {
 	console.error(err.stack);
 	res.status(500).render("500")
+})
+app.use(function(err, req, res, next) {
+	console.error(err.stack);
+	res.status(403).render("403")
 })
 
 //listening for a sever connection

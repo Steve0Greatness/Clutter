@@ -16,5 +16,7 @@ The editor is easy to use, it takes seconds to create a Clutter
 ## Contributing? See Also
 [CONTRIBUTING.md](/.github/CONTRIBUTING.md)
 
+<!--If the Repl is being run: in the "Shell" tab, type in "busybox reboot"-->
+
 ## Note
 This is still a work in progress(WIP), it isn't finished, and could take some time to finish.
