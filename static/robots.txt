@@ -1,5 +1,5 @@
 # start of file
-user-agent: 
+user-agent: *
 disallow: /post/
 disallow: /search
 disallow: /api/

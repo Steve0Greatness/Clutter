@@ -22,22 +22,22 @@ const testProject = {
 var featured = [testProject]
 const daysOfTheWeek = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
 const monthsOfTheYear = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+//when testing, add the domain to the array below VVV. Make sure to remove it before you make a Pull Request.
 const whitelist = ['https://clutter.stevesgreatness.repl.co']
 const corsOptions = {
 	origin: function(origin, callback) {
 		if (whitelist.indexOf(origin) !== -1) {
 			callback(null, true)
 		} else {
-			callback(new Error('Not allowed by CORS'))
-			res.render("403")
+			callback(new Error('403'))
 		}
 	}
 }
 const toBinary = (str = '') => {
-  let res = str.split('').map(char => {
-    return char.charCodeAt(0).toString(2);
-  }).join(' ');
-  return res;
+	let res = str.split('').map(char => {
+		return char.charCodeAt(0).toString(2);
+	}).join(' ');
+	return res;
 }
 const charAppears = (char, inside) => {
 	let ammount = 0
@@ -55,10 +55,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 //middleware
-app.use(function(req, res, next) {
-	//https://stackoverflow.com/questions/8605720/how-to-force-ssl-https-in-express-js#31144924
-	if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
-		return res.redirect('https://' + req.get('host') + req.url);
+app.enable('trust proxy')
+app.use((req, res, next) => {
+	if (process.env.NODE_ENV != 'development' && !req.secure) {
+		return res.redirect("https://" + req.headers.host + req.url);
 	}
 	next();
 })
@@ -175,7 +175,7 @@ app.get("/api/clutters/:id/thumbnail.png", cors(), (req, res) => {
 	db.get(id).then(value => {
 		let parse = JSON.parse(value)
 		res.statusCode = 302;
-		res.setHeader("Location", "https://uploads.scratch.mit.edu/projects/thumbnails/"+ parse["included"][parse["thumb"]] + ".png")
+		res.setHeader("Location", "https://uploads.scratch.mit.edu/projects/thumbnails/" + parse["included"][parse["thumb"]] + ".png")
 		res.end();
 	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
 })
@@ -232,9 +232,12 @@ app.put("/post/clutter", cors(corsOptions), (req, res) => {
 })
 app.put("/post/comment", cors(corsOptions), (req, res) => {
 	let data = req.body
-	console.log(data)
+	res.send(`<div class="comment">
+				<div class="commentUser"><a href="/users/${data["user"]}">${data["user"]}</a></div>
+				${data["body"]}
+			</div>`)
 })
-app.put("/post/loginReq", cors(), (req, res) => {
+app.put("/post/loginReq", cors(corsOptions), (req, res) => {
 	let loginWant = req["body"]["want"]
 	let loginBase64 = req["body"]["c"]
 	let binary = Buffer.from(String(charAppears("1", toBinary(loginWant)) + 1), 'utf-8').toString('base64')
@@ -244,7 +247,9 @@ app.put("/post/loginReq", cors(), (req, res) => {
 		res.send('')
 	}
 })
-
+app.get("/post/*", (req, res) => { 
+	sendOtherCodeError(405, res) 
+})
 
 //debug pages
 app.get("/debug/", (req, res) => {
@@ -259,6 +264,10 @@ app.get("/debug/500", (req, res) => {
 app.get("/debug/403", (req, res) => {
 	res.render("403")
 })
+app.get("/debug/Clutter", (req, res) => {
+	let key = testProject
+	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: key["id"], creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
+})
 
 //errors
 app.use(function(req, res) {
@@ -268,10 +277,9 @@ app.use(function(err, req, res, next) {
 	console.error(err.stack);
 	res.status(500).render("500")
 })
-app.use(function(err, req, res, next) {
-	console.error(err.stack);
-	res.status(403).render("403")
-})
+function sendOtherCodeError(error = 404, res) {
+	res.status(error).render(String(error))
+}
 
 //listening for a sever connection
 app.listen(port, () => { })

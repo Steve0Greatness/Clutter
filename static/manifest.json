@@ -25,6 +25,11 @@
 			"src": "/img/screenshots/Screenshot1.png",
 			"type": "image/png",
 			"sizes": "1920x1080"
+		},
+		{
+			"src": "/img/screenshots/Screenshot2.png",
+			"type": "image/png",
+			"sizes": "1920x1080"
 		}
 	]
 }

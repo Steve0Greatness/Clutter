@@ -7,7 +7,7 @@
 
 Clutter is an editor where you can... make Clutters. It's partially based off of the original one from Scratch 1.4. However, it's only based in name and basic function.
 
-Please note that this repo will not be up to date with the website. This is because the website is hosted via Replit, and sometimes I like to make too many changes before commiting to the repo
+Please note that this repo may not be up to date with the website. This is because the website is hosted via Replit, and sometimes I like to make too many changes before commiting to the repo
 
 ## Editor
 The editor is easy to use, it takes seconds to create a Clutter
@@ -15,6 +15,9 @@ The editor is easy to use, it takes seconds to create a Clutter
 
 ## Contributing? See Also
 [CONTRIBUTING.md](/.github/CONTRIBUTING.md)
+
+#### Suggested Code Editor
+I'd suggest to use [Replit](//replit.com), it automatically installs all the [dependencies](https://github.com/Steve0Greatness/Clutter/network/dependencies)
 
 <!--If the Repl is being run: in the "Shell" tab, type in "busybox reboot"-->
 

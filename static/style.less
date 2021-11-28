@@ -214,6 +214,7 @@ center {
 
 #userName {
 	font-size: 2.5em;
+	color: #000;
 }
 
 #userAvatar {
@@ -222,11 +223,15 @@ center {
 	border-radius: 5px;
 }
 
+#userLink {
+	text-decoration: none;
+}
+
 /*Comments*/
 .comment {
 	background: var(--commentBackground);
 	color: var(--commentText);
-	display: inline-block;
+	display: block;
 	padding: 5px;
 	padding-left: 0;
 	border: 2px var(--blockBorder) solid;
@@ -235,7 +240,7 @@ center {
 		display: initial;
 		margin-right: 1em;
 		padding: 5px;
-		padding-bottom: 6px;
+		padding-bottom: 7px;
 		:any-link {
 			color: var(--commentUsera);
 			font-weight: bolder;

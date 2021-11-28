@@ -23,7 +23,7 @@
 		<span id="date">
 			<%- dateP -%>
 		</span> <a href="/edit/<%= id %>"><button>See Inside</button></a> <button onclick="embedDispaly('block')">Embed</button><br>
-		<input type="text" id="commentBox"></input> <button>Submit</button>
+		<input type="text" id="commentBox"></input> <button onclick="postComment()">Submit</button>
 		<div id="comments">
 		</div>
 	</div>
@@ -51,6 +51,30 @@
 		function selectTxt(element) {
 			element.select()
 			element.setSelectionRange(0, 99999)
+		}
+
+		//comment sending
+		async function postComment() {
+			if (localStorage.getItem("user") == null|undefined) {
+				alert("You need to be loged in to post comments")
+				return;
+			}
+			let poster = await checkLogin()
+			let body = {
+				for: <%- id -%>,
+				user: poster,
+				body: document.getElementById("commentBox").value
+			}
+			fetch("/post/comment", {
+				method: 'PUT', 
+				headers: { 'Content-Type':'application/json' },
+				body: JSON.stringify(body)
+			})
+				.then(res => res.text())
+				.then(body => {
+					document.getElementById("commentBox").value = ""
+					document.getElementById("comments").innerHTML = body + document.getElementById("comments").innerHTML
+				})
 		}
 	</script>
 	<!--<div class="comment">

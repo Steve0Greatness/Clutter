@@ -18,38 +18,38 @@
 	<!--Getting the player-->
 	<%- include('player'); -%>
 	<div class="contentEditor" id="content">
+		<!--information about the project for sharing-->
+		<% if (!(isPre)) { %>
+		<button onclick="shareProject()">Share</button>
+		<input type="text" onchange="beforeunload(true)" id="clutterName" placeholder="Clutter Name">
+		<input type="number" onchange="beforeunload(true)" placeholder="Project's Thumbnail Shown" id="thumbnailNum" value="1">
+		<% } else { %>
+		<button onclick="shareProject()">Save</button>
+		<a href="/clutters/<%= id %>"><button onclick="beforeunload(false)">See Page</button></a>
+		<input type="text" id="clutterName" onchange="beforeunload(true)" placeholder="Clutter Name" value="<%= cName %>">
+		<input type="number" onchange="beforeunload(true)" placeholder="Project's Thumbnail Shown" value="<%= thum %>" id="thumbnailNum">
+		<% } %><br><br>
 		<!--editing part of the editor-->
 		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button><br>
 		<% if (!(isPre)) { %>
-		<form id="projectIds" onsubmit="return false">
+		<form id="projectIds" onsubmit="return false" onchange="beforeunload(true)">
 			<input type="text" placeholder="add link to a shared Scratch project."><br>
 		</form>
 		<% } else { %>
-		<form id="projectIds" onsubmit="return false">
+		<form id="projectIds" onsubmit="return false" onchange="beforeunload(true)">
 			<% for(var project in proj) { %>
 				<input type="text" placeholder="add link to a shared Scratch project." value="https://scratch.mit.edu/projects/<%= proj[project] %>"><br>
 			<% } %>
 		</form>
-		<% } %><br><br>
-		<!--information about the project for sharing-->
-		<% if (!(isPre)) { %>
-		<button onclick="shareProject()">Share</button>
-		<input type="text" id="clutterName" placeholder="Clutter Name">
-		<input type="number" placeholder="Project's Thumbnail Shown" id="thumbnailNum" value="1">
-		<% } else { %>
-		<button onclick="shareProject()">Save</button>
-		<a href="/clutters/<%= id %>"><button>See Page</button></a>
-		<input type="text" id="clutterName" placeholder="Clutter Name" value="<%= cName %>">
-		<input type="number" placeholder="Project's Thumbnail Shown" value="<%= thum %>" id="thumbnailNum">
-		<% } %><br>
+		<% } %>
 	</div>
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
+		var sharing = false
 		<%# this changes depending on whether you're editing or changing a project %><% if (isPre == false) { %>console.log("creating a new clutter")<% } else { %>console.log("editing a pre-existing clutter")
 		submitClutter()
 		<% } %>
 		function shareProject() {
-			beforeunload(false)
 			if (localStorage.getItem("user") == null|undefined) {
 				alert("you must be logged in to share a project")
 			} else {
@@ -61,6 +61,7 @@
 				let formData = Object.values(form)
 				let formValues = []
 				for (let i = 0; i < formData.length; i++) {
+
 					if (formData[i]["value"].includes("https://scratch.mit.edu/projects/")) {
 						let curdata = formData[i]["value"].substr(33, formData[i]["value"].length)
 						if (checkForSlashTF(curdata)) {
@@ -68,11 +69,12 @@
 						}
 						formValues.push(curdata)
 					} else {
-						beforeunload(true)
 						alert("Something doesn't seem right about the project at spot " + i + ". Please make sure it's a full project url.")
 						return;
 					}
 				}
+				sharing = true
+				beforeunload(false)
 				let isEdit = false
 				<% if (isPre) { %>
 				if (checkLogin() == <%- JSON.stringify(creator) -%>) {
@@ -106,6 +108,7 @@
 		function beforeunload(yesNo) {
 			if (yesNo) {
 				window.addEventListener('beforeunload', (unload) => {
+					if (sharing) { return; }
   				unload.preventDefault()
 			  	unload.returnValue = ''
 				})
@@ -115,7 +118,6 @@
 				}, true)
 			}
 		}
-		beforeunload(true)
 	</script>
 </body>
 

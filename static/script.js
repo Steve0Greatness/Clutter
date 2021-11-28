@@ -90,7 +90,7 @@ function checkForSlashTF(url) {
 
 //gets the url for redirecting back
 function getLoginURL() {
-	return `https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=${btoa(location.href.substr(8, location.href.length))}`
+	return `https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=${btoa(location.origin.substr(8, location.origin.length) + location.pathname)}`
 }
 
 var loginLink = `<a href="${getLoginURL()}">Login with FluffyScratch</a>`
@@ -98,17 +98,18 @@ var login = document.getElementById("login")
 var userIsnt = localStorage.getItem("user") != null | ''
 
 //check if they have logged in already
+login.innerHTML = loginLink
 if (Object.keys(location.searchtree).includes("privateCode")) {
 	//check if they have gone though varifacation.
 	fetch("https://fluffyscratch.hampton.pw/auth/verify/v2/" + location.searchtree["privateCode"])
 		.then(blob => blob.json())
 		.then(data => {
 			if (data["valid"]) {
-				//check if valid
-				let user = data["username"]
-				login.innerHTML = `<a href="/users/${user}">${user}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25"></a>`
+				//if valid
 				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + 1), 'utf-8'))
-				localStorage.setItem("user", user)
+				localStorage.setItem("user", data["username"])
+				//shows the user they were logged in
+				setLogin()
 			} else if (userIsnt) {
 				//otherwise, check if they're logged in already
 				setLogin()
@@ -120,6 +121,7 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 } else { login.innerHTML = loginLink }
 
 function checkLogin() {
+	setLogin()
 	let user = ""
 	if (localStorage.getItem("user") != null | undefined) {
 		user = localStorage.getItem("user")
@@ -138,11 +140,10 @@ function setLogin() {
 		.then(res => res.text())
 		.then(data => {
 			if (data != '') {
-				login.innerHTML = `<a href="/users/${data}">${data}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
+				login.innerHTML = `<a href="/users/${data}"><img src="/api/users/${user}/avartar.png" width="24" style="margin-bottom: -3px;">${data}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
 			} else {
 				logout()
 			}
-			//console.log(data)
 		})
 }
 
@@ -157,11 +158,31 @@ const charAppears = (char, inside) => {
 }
 
 const toBinary = (str = '') => {
-  let res = str.split('').map(char => {
-    return char.charCodeAt(0).toString(2);
-  }).join(' ');
-  return res;
+	let res = str.split('').map(char => {
+		return char.charCodeAt(0).toString(2);
+	}).join(' ');
+	return res;
 }
+
+
+//when updated, make sure it's correct
+window.addEventListener('storage', () => {
+	let want = localStorage.getItem("user")
+	let c = localStorage.getItem("login")
+	if (want != "" && c != "") {
+		fetch("/post/loginReq", {
+			method: "PUT",
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ want: want, c: c })
+		})
+			.then(res => res.text())
+			.then(data => {
+				if (data == '') {
+					logout()
+				}
+			})
+	}
+})
 
 //log them out
 function logout() {
