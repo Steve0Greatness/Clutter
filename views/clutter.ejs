@@ -14,33 +14,70 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		<a href="/users/<%- creator -%>"><%- creator -%></a>
-		<h1><%- cName -%> </h1>
+		<div id="creatorandcluttername">
+			<a href="/users/<%- creator -%>"><img src="/api/users/<%- creator -%>/avartar.png" width="55" align="left"></a><h1 id="clutterName"><%- cName -%></h1><br>
+			<a href="/users/<%- creator -%>"><%- creator -%></a>
+		</div>
 		<% if (remix) { %>
-		Remixed from <a href="/clutters/<%- original -%>"><%- originalName -%></a> by <a href="/users/<%- originalCreator -%>"><%- originalCreator-%></a>
+		<div id="remixedfrom">
+			Remixed from <a href="/clutters/<%- original -%>"><%- originalName -%></a> by <a href="/users/<%- originalCreator -%>"><%- originalCreator-%></a>
+		</div>
 		<% } %>
 		<%- include("player") -%><br>
 		<span id="date">
 			<%- dateP -%>
 		</span> <a href="/edit/<%= id %>"><button>See Inside</button></a> <button onclick="embedDispaly('block')">Embed</button><br>
-		<input type="text" id="commentBox"></input> <button onclick="postComment()">Submit</button>
+		<input type="text" id="commentBox" maxlength="200"></input> <button onclick="postComment()">Submit</button>
 		<div id="comments">
 		</div>
 	</div>
 	<div id="embed">
 		<div style="text-align:right"><button class="xOut" onclick="embedDispaly('none')">X</button></div>
-		<input value="<iframe src='https://clutter.stevesgreatness.repl.co/embed/<%- id -%>' width='700' height='450'></iframe>" readonly id="embedHTML"><br><button onclick="copyText(document.getElementById('embedHTML'))">Copy Text</button>
+		<input value="<iframe src='https://clutter.stevesgreatness.repl.co/embed/<%- id -%>' width='700' height='450'></iframe>" readonly id="embedHTML"><br><button onclick="copyText(document.getElementById('embedHTML'))">Copy HTML</button><br>
+		options<br>
+		<form onchange="updateLink()">
+		<input type="checkbox" id="hideclutter">Remove link to Clutter<br>
+		<input type="checkbox" id="hidescratch">Remove link to Scratch<br>
+		<input type="checkbox" id="hideturbowarp">Remove link to Turbowarp<br>
+		<input type="checkbox" id="autoplay">Enable autoplay
+		</form>
 	</div>
 	<%- include("footer") -%>
 	<script src="/script.js"></script>
 	<script>
 		//render
 		var projects = <%- JSON.stringify(proj) -%>;
-		renderClutter(projects)
+		function start() {
+			document.getElementById("iframe").outerHTML = "<iframe width=\"485\" height=\"402\" id=\"iframe\" align=\"left\" src></iframe>"
+			document.getElementById("layerOntopOfPlayer").outerHTML = ""
+			renderClutter(projects)
+		}
 
 		//embed
 		function embedDispaly(value) {
 			document.getElementById("embed").style.display = value
+		}
+
+		function updateLink() {
+			var options = []
+			console.log("updating")
+			if (document.getElementById("hideclutter").checked) {
+				options.push("hideclutter")
+				console.log("clutterless")
+			}
+			if (document.getElementById("hidescratch").checked) {
+				options.push("hidescratch")
+				console.log("scratchless")
+			}
+			if (document.getElementById("hideturbowarp").checked) {
+				options.push("hideturbowarp")
+				console.log("turbowarpless")
+			}
+			if (document.getElementById("autoplay").checked) {
+				options.push("autoplay")
+				console.log("auto")
+			}
+			document.getElementById("embedHTML").value = `<iframe src='https://clutter.stevesgreatness.repl.co/embed/<%- id -%>?${options.join("&")}' width='700' height='450'></iframe>`
 		}
 
 		//text coping
@@ -59,6 +96,7 @@
 				alert("You need to be loged in to post comments")
 				return;
 			}
+			if (document.getElementById("commentBox").value == "") { return; }
 			let poster = await checkLogin()
 			let body = {
 				for: <%- id -%>,

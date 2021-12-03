@@ -19,18 +19,18 @@
 		</table>
 		</a>
 		<!--<div class="block" style="display: inline-block;"><div class="head">Featured Clutter</div></div><br><br>-->
-		<div id="newest" class="block" style="width: fit-content;">
+		<% if (made.length !== 0) { %><div id="newest" class="block" style="width: fit-content;">
 			<div class="head">
 				Newest Clutter
 			</div>
-			<% if (made.length !== 0) { %><div class="project">
+			<div id="newestClutter" class="project">
 				<a href="/clutters/<%- made[made.length - 1]["id"] -%>">
 					<img src="/api/clutters/<%- made[made.length - 1]["id"] -%>/thumbnail.png" width="120" alt="<%- made[made.length - 1]["name"] -%>'s Thumbnail"><br>
 					<%- made[made.length - 1]["name"] -%>
 					</a><br>
 					<a href="/users/<%- made[made.length - 1]["creator"] -%>" style="font-size:10px"><%- made[made.length - 1]["creator"] -%></a>
-			</div><% } %>
-		</div><br>
+			</div>
+		</div><br><% } %>
 		<div id="clutters" class="block">
 			<div class="head">
 				Clutters
@@ -43,7 +43,7 @@
 					<a href="/users/<%- made[i]["creator"] -%>" style="font-size:10px"><%- made[i]["creator"] -%></a>
 			</div><% } %>
 			<% if (made.length === 0) { %>
-				This user hasn't made any Clutters yet
+				This user hasn't made any Clutters yet.
 			<% } %>
 		</div>
 	</div>

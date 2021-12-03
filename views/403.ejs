@@ -19,9 +19,18 @@
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
 	<script>
-		if (screen.width < 450) {
-			document.getElementById("BlueBird").width = screen.width - 30
+		let image = document.getElementById("BlueBird")
+		window.onresize = () => {
+			checkImage()
 		}
+		function checkImage() {
+			if (screen.width < 450) {
+				image.width = screen.width - 30
+			} else {
+				image.width = 450
+			}
+		}
+		checkImage()
 	</script>
 </body>
 

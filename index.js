@@ -9,17 +9,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const less = require('less-middleware')
 const request = require('request')
-const port = 3000
-const testProject = {
-	name: "name:)",
-	creator: "Steve0Greatness",
-	included: ["588586405", "487519987"],
-	date: "Sat, Nov 13 2021",
-	thumb: 0,
-	id: 1,
-	remix: [false, "", "", ""]
-}
-var featured = [testProject]
+const port = Math.round(Math.random() * 8000)
+const testProject = { name: "name:)", creator: "Steve0Greatness", included: ["588586405", "487519987"], date: "Sat, Nov 13 2021", thumb: 0, id: 1, remix: [false, "", "", ""] }
+const featured = [1]
+const blackListed = []
 const daysOfTheWeek = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
 const monthsOfTheYear = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
 //when testing, add the domain to the array below VVV. Make sure to remove it before you make a Pull Request.
@@ -70,7 +63,11 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 //rendering pages
 app.get('/', (req, res) => {
-	res.render("home", { featured: featured })
+	let sendData = []
+	for (let i = 0; i < featured.length; i++) {
+		db.get(String(featured[i])).then(value => sendData.push(JSON.parse(value)))
+	}
+	setTimeout(() => { res.render("home", { featured: sendData }) }, featured.length * 400)
 })
 app.get('/create', (req, res) => { res.render("editor", { isPre: false, name: req.body.name }) })
 app.get('/edit/:id', (req, res) => {
@@ -93,19 +90,23 @@ app.get('/users/:name', (req, res) => {
 	let name = req.params.name
 	let clutters = []
 	request.get("https://scratchdb.lefty.one/v3/user/info/" + name, { json: true }, (err, resp, body) => {
-		db.list().then(keys => {
-			for (var i in keys) {
-				db.get(String(keys[i])).then(value => {
-					let data = JSON.parse(value)
-					if (data["creator"].toUpperCase() == name.toUpperCase()) {
-						clutters.push(data)
-					}
-				})
-			}
-			setTimeout(function() {
-				res.render("user", { name: body["username"], made: clutters, id: body["id"] })
-			}, 250)
-		})
+		if (Object.keys(body).includes("error")) {
+			res.render("404", { path: name, type: 2 })
+		} else {
+			db.list().then(keys => {
+				for (var i in keys) {
+					db.get(String(keys[i])).then(value => {
+						let data = JSON.parse(value)
+						if (data["creator"].toUpperCase() == name.toUpperCase()) {
+							clutters.push(data)
+						}
+					})
+				}
+				setTimeout(function() {
+					res.render("user", { name: body["username"], made: clutters, id: body["id"] })
+				}, 300)
+			})
+		}
 	})
 })
 app.get("/about", (req, res) => {
@@ -142,7 +143,7 @@ app.get("/search", (req, res) => {
 		}
 		setTimeout(function() {
 			res.render("search", { q: search, returned: clutters })
-		}, keys.length * 200)
+		}, keys.length * 250)
 	})
 })
 app.get("/embed/:id", cors(), (req, res) => {
@@ -151,7 +152,6 @@ app.get("/embed/:id", cors(), (req, res) => {
 		let key = JSON.parse(value)
 		res.render('embed', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
 	}).catch(error => {
-
 		res.render("404", { path: id, type: 1 })
 	})
 })
@@ -193,9 +193,10 @@ app.get('/api/users/:name', cors(), (req, res) => {
 				})
 			}
 			setTimeout(function() {
-				let sendObject = { name: body["username"], id: body["id"], clutters: clutters }
+				let pfp = req.protocol + "://" + req.get('host') + "/api/users/" + body["username"] + "/avartar.png"
+				let sendObject = { name: body["username"], profilePicture: pfp, clutters: clutters }
 				res.send(sendObject)
-			}, 250)
+			}, 300)
 		})
 	})
 })
@@ -210,7 +211,11 @@ app.get('/api/users/:name/avartar.png', cors(), (req, res) => {
 	})
 })
 app.get("/api/featured", cors(), (req, res) => {
-	res.send(featured)
+	let sendData = []
+	for (let i = 0; i < featured.length; i++) {
+		db.get(String(featured[i])).then(value => sendData.push(JSON.parse(value)))
+	}
+	setTimeout(() => { res.send(sendData) }, featured.length * 200)
 })
 app.get("/api/*", cors(), (req, res) => {
 	res.send({ notice: "couldn't find endpoint", error: 404 })
@@ -241,14 +246,14 @@ app.put("/post/loginReq", cors(corsOptions), (req, res) => {
 	let loginWant = req["body"]["want"]
 	let loginBase64 = req["body"]["c"]
 	let binary = Buffer.from(String(charAppears("1", toBinary(loginWant)) + 1), 'utf-8').toString('base64')
-	if (binary == loginBase64) {
+	if (binary == loginBase64 && !(blackListed.includes(loginWant.toUpperCase()))) {
 		res.send(loginWant)
 	} else {
 		res.send('')
 	}
 })
-app.get("/post/*", (req, res) => { 
-	sendOtherCodeError(405, res) 
+app.all("/post/*", (req, res) => {
+	sendOtherCodeError(405, res, req.method)
 })
 
 //debug pages
@@ -264,6 +269,10 @@ app.get("/debug/500", (req, res) => {
 app.get("/debug/403", (req, res) => {
 	res.render("403")
 })
+app.get("/debug/405", (req, res) => {
+	let method = req.query.method.toUpperCase()
+	res.render("405", { method: method })
+})
 app.get("/debug/Clutter", (req, res) => {
 	let key = testProject
 	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: key["id"], creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
@@ -277,12 +286,14 @@ app.use(function(err, req, res, next) {
 	console.error(err.stack);
 	res.status(500).render("500")
 })
-function sendOtherCodeError(error = 404, res) {
-	res.status(error).render(String(error))
+function sendOtherCodeError(error = 404, res, method) {
+	res.status(error).render(String(error), { method: method })
 }
 
 //listening for a sever connection
-app.listen(port, () => { })
+app.listen(port, () => {
+	console.log("If you're using this locally on your machine, you can find this at http://localhost:" + port)
+})
 
 /*
 inorder to use arrays, objects, and strings in static ejs files, use JSON.stringify(varName)

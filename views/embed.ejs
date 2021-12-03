@@ -7,8 +7,18 @@
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<%- include("player") -%><a href="/clutters/<%- id -%>" target="_parent">View <%- cName -%> on Clutter</a> | <a href id="curScratchProjectLink" target="_parent">View current project on Scratch</a>(<a href id="curTurbowarpProjectLink" target="_parent">Turbowarp</a>)
+<%- include("playerEmbed") -%><div id="links"><a href="/clutters/<%- id -%>" target="_parent" id="viewOnclutter">View <%- cName -%> on Clutter</a><span id="otherlinks"> | </span><a href id="curScratchProjectLink" target="_parent">View current project on Scratch</a><span id="fullTurbowarpPara">(<a href id="curTurbowarpProjectLink" target="_parent">Turbowarp</a>)</span></div>
 <script>
+const search = location.search.split(/[?&]/)
+search.shift()
+location.searchtree = {}
+for (let i = 0; i < search.length; i++) {
+	if (search[i].includes("=")) {
+		location.searchtree[search[i].split(/=/)[0]] = search[i].split(/=/)[1]
+	} else {
+		location.searchtree[search[i]] = search[i]
+	}
+}
 var clutter = []
 var originalIds = []
 function renderClutter(array) {
@@ -20,22 +30,22 @@ function renderClutter(array) {
 	console.log(clutter)
 	let cluttero = clutter[0]
 	let embed = checkForSlash(cluttero)
-	document.getElementById("iframe").src = clutter[0] + embed
+	document.getElementById("iframe").src = clutter[0] + embed + "?autoplay"
 	document.getElementById("curScratchProjectLink").href = "//scratch.mit.edu/projects/" + originalIds[0]
 	document.getElementById("curTurbowarpProjectLink").href = "//turbowarp.org/" + originalIds[0]
 }
 
 function nextProject(array) {
-	let current = array.indexOf(document.getElementById("iframe").src) + 1
-	let next = array[current + 1]
-	console.log(next)
+	let current = array.indexOf(document.getElementById("iframe").src) + 2
+	let next = array[current]
+	console.log(next + "?autoplay")
 	alsoSet(current + 1, next)
 }
 
 function lastProject(array) {
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let last = array[current]
-	console.log(last)
+	console.log(last + "?autoplay")
 	alsoSet(current, last)
 }
 
@@ -57,9 +67,30 @@ function checkForSlashTF(url) {
 function alsoSet(num, vari) {
 	document.getElementById("iframe").src = vari + checkForSlash(vari)
 	document.getElementById("curScratchProjectLink").href = "//scratch.mit.edu/projects/" + originalIds[num]
-	document.getElementById("curTurbowarpProjectLink").href = "//scratch.mit.edu/projects/" + originalIds[num]
+	document.getElementById("curTurbowarpProjectLink").href = "//turbowarp.org/" + originalIds[num]
 }
-renderClutter(<%- JSON.stringify(proj) -%>)
+
+function start() {
+	document.getElementById("iframe").outerHTML = "<iframe width=\"485\" height=\"402\" id=\"iframe\" align=\"left\" src></iframe>"
+	document.getElementById("layerOntopOfPlayer").outerHTML = ""
+	renderClutter(<%- JSON.stringify(proj) -%>)
+}
+
+if (Object.keys(location.searchtree).includes("autoplay")) {
+	start()
+}
+if (Object.keys(location.searchtree).includes("hideturbowarp")) {
+	document.getElementById("fullTurbowarpPara").style.display = "none"
+}
+if (Object.keys(location.searchtree).includes("hidescratch")) {
+	document.getElementById("curScratchProjectLink").style.display = "none"
+}
+if (Object.keys(location.searchtree).includes("hideclutter")) {
+	document.getElementById("viewOnclutter").style.display = "none"
+}
+if (Object.keys(location.searchtree).includes("hideclutter") || Object.keys(location.searchtree).includes("hidescratch") && Object.keys(location.searchtree).includes("hideturbowarp")) {
+	document.getElementById("otherlinks").style.display = "none"
+}
 </script>
 </body>
 

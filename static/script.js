@@ -52,23 +52,25 @@ function renderClutter(array) {
 	let cluttero = clutter[0]
 	let embed = checkForSlash(cluttero)
 	let user = checkLogin()
-	document.getElementById("iframe").src = clutter[0] + embed + "?username=" + user
+	document.getElementById("iframe").src = clutter[0] + embed + "?autoplay&username=" + user
 }
 
 function nextProject(array) {
+	if (document.getElementById("iframe").className == "beforeStart") { return; }
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let next = array[current + 1]
 	let user = checkLogin()
 	console.log(next)
-	document.getElementById("iframe").src = next + checkForSlash(next) + "?username=" + user
+	document.getElementById("iframe").src = next + checkForSlash(next) + "?autoplay&username=" + user
 }
 
 function lastProject(array) {
+	if (document.getElementById("iframe").className == "beforeStart") { return; }
 	let current = array.indexOf(document.getElementById("iframe").src) + 1
 	let last = array[current]
 	console.log(last)
 	let user = checkLogin()
-	document.getElementById("iframe").src = last + checkForSlash(last) + "?username=" + user
+	document.getElementById("iframe").src = last + checkForSlash(last) + "?autoplay&username=" + user
 }
 
 function checkForSlash(url) {
@@ -106,7 +108,8 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 		.then(data => {
 			if (data["valid"]) {
 				//if valid
-				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + 1), 'utf-8'))
+				let user = data["username"]
+				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + 1)))
 				localStorage.setItem("user", data["username"])
 				//shows the user they were logged in
 				setLogin()
@@ -193,5 +196,8 @@ function logout() {
 
 /*Relating to Searching*/
 function searchBar(searchText) {
+	if (searchText == "") {
+		return;
+	}
 	location = "/search?q=" + searchText
 }

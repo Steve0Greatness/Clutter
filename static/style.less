@@ -1,4 +1,5 @@
 :root {
+	--searchRadius: 10px;
 	--primary: #55f;
 	--primaryText: #fff;
 	--foot: #ccc;
@@ -24,6 +25,7 @@
 	--commentLink: #00f;
 	--commentUsera: #fff;
 	--embedBack: #ececec;
+	--contentMinHeight: 81%;
 	font-family: sans-serif;
 }
 
@@ -109,7 +111,7 @@ html, body {
 	margin-right: 8px;
 	margin-left: 8px;
 	padding-top: .5em;
-	min-height: 83%;
+	min-height: var(--contentMinHeight);
 	height: auto;
 }
 
@@ -145,6 +147,10 @@ a:any-link {
 	margin-right: .25em;
 	text-align: center;
 	margin-top: 0.1em;
+	&#newestClutter {
+		position: relative;
+		left: 10%;
+	}
 	.creator {
 		font-size: .95em;
 	}
@@ -175,34 +181,28 @@ input, button {
 	margin: -4px;
 }
 
-iframe {
-	border: none;
-	border-radius: 5px;
-}
 .search {
 	background: var(--inputSearch);
 	color: var(--primaryText);
 	border: none;
 	padding: 12px;
+	border-radius: 0 var(--searchRadius) var(--searchRadius) 0;
 	&::placeholder {
   	font-size: 1em;
   	color: #ccc;
 	}
+	&.input {
+		border-radius: var(--searchRadius) 0 0 var(--searchRadius);
+	}
 }
 
-#player {
-	display: block;
-}
-
-/*404*/
+/*Error*/
 .path {
 	font-family: monospace;
 }
 
-center {
-	&#notfound {
-		margin-top: 9em;
-	}
+center#notfound {
+	margin-top: 9em;
 }
 
 /*User Pages*/
@@ -233,14 +233,18 @@ center {
 	color: var(--commentText);
 	display: block;
 	padding: 5px;
+	line-break: anywhere;
 	padding-left: 0;
+	height: 40px;
 	border: 2px var(--blockBorder) solid;
 	.commentUser {
 		background: var(--commentUserBackground);
 		display: initial;
 		margin-right: 1em;
 		padding: 5px;
-		padding-bottom: 7px;
+		margin-top: -5px;
+		height: 40px;
+		float: left;
 		:any-link {
 			color: var(--commentUsera);
 			font-weight: bolder;
@@ -294,4 +298,50 @@ table.viewTable th {
 }
 .xOut {
 	border-radius: 15px;
+}
+#layerOntopOfPlayer {
+	position: absolute;
+	top: 90px;
+	left: 135px;
+	background: url("/img/play.svg") no-repeat center;
+	background-size: 200px;
+	width: 200px;
+	height: 200px;
+	cursor: pointer;
+	z-index: 100;
+	&.normalPage {
+		top: round(402px/4);
+		left: round(485px/3.5);
+	}
+	&:hover {
+		filter: brightness(150%);
+	}
+}
+#clutterName {
+	margin: 0;
+	display: inline-block;
+}
+.beforeStart {
+	filter: brightness(60%);
+}
+#prevProjectImg, #nextProjectImg {
+	transition: .15s ease all;
+	width: 200px;
+	cursor: pointer;
+	&:hover {
+		width: 210px;
+		margin-bottom: 7px;
+		filter: drop-shadow(2px 4px 6px black);
+	}
+}
+#iframe {
+	border: none;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+#player {
+	display: block;
+	#playerI {
+		position: relative;
+	}
 }

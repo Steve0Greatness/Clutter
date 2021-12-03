@@ -16,7 +16,7 @@
 <body>
 	<%- include("header") -%>
 	<!--Getting the player-->
-	<%- include('player'); -%>
+	<%- include('editorPlayer'); -%>
 	<div class="contentEditor" id="content">
 		<!--information about the project for sharing-->
 		<% if (!(isPre)) { %>
@@ -54,14 +54,16 @@
 				alert("you must be logged in to share a project")
 			} else {
 				if (document.getElementById("clutterName").value|document.getElementById("thumbnailNum").value == '') { 
-					alert("Error")
 					return; 
 				}
 				let form = document.forms["projectIds"]
 				let formData = Object.values(form)
+				if (formData.length === 1|0) { 
+					alert("You must have at least 2 projects to share you clutter")
+					return; 
+				}
 				let formValues = []
 				for (let i = 0; i < formData.length; i++) {
-
 					if (formData[i]["value"].includes("https://scratch.mit.edu/projects/")) {
 						let curdata = formData[i]["value"].substr(33, formData[i]["value"].length)
 						if (checkForSlashTF(curdata)) {
