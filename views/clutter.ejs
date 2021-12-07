@@ -23,24 +23,34 @@
 			Remixed from <a href="/clutters/<%- original -%>"><%- originalName -%></a> by <a href="/users/<%- originalCreator -%>"><%- originalCreator-%></a>
 		</div>
 		<% } %>
-		<%- include("player") -%><br>
-		<span id="date">
-			<%- dateP -%>
-		</span> <a href="/edit/<%= id %>"><button>See Inside</button></a> <button onclick="embedDispaly('block')">Embed</button><br>
-		<input type="text" id="commentBox" maxlength="200"></input> <button onclick="postComment()">Submit</button>
+		<%- include("player") -%>
+		<div id="data">
+			<span id="date"><%- dateP -%></span>
+			<span id="views"><img><%- views -%></span>
+		</div>
+		 <a href="/edit/<%= id %>"><button>See Inside</button></a> <button onclick="embedDispaly('block')">Share</button> <button onclick="report()" class="report">Report</button><br>
+		<input type="text" id="commentBox" maxlength="200"> <button onclick="postComment()">Submit</button>
 		<div id="comments">
 		</div>
 	</div>
 	<div id="embed">
 		<div style="text-align:right"><button class="xOut" onclick="embedDispaly('none')">X</button></div>
-		<input value="<iframe src='https://clutter.stevesgreatness.repl.co/embed/<%- id -%>' width='700' height='450'></iframe>" readonly id="embedHTML"><br><button onclick="copyText(document.getElementById('embedHTML'))">Copy HTML</button><br>
-		options<br>
-		<form onchange="updateLink()">
-		<input type="checkbox" id="hideclutter">Remove link to Clutter<br>
-		<input type="checkbox" id="hidescratch">Remove link to Scratch<br>
-		<input type="checkbox" id="hideturbowarp">Remove link to Turbowarp<br>
-		<input type="checkbox" id="autoplay">Enable autoplay
-		</form>
+		<details open>
+			<summary>Link</summary>
+			<input type="text" onclick="copy(this)" id="myLink" value="https://clutter.stevesgreatness.repl.co/clutters/<%- id -%>"><br>
+			<button onclick="copy(document.getElementById('myLink'))">Copy Link</button>
+		</details>
+		<details>
+			<summary>Embed</summary>
+			<input value="<iframe src='https://clutter.stevesgreatness.repl.co/embed/<%- id -%>' width='700' height='450'></iframe>" readonly id="embedHTML"><br><button onclick="copyText(document.getElementById('embedHTML'))">Copy HTML</button><br>
+			options<br>
+			<form onchange="updateLink()">
+				<input type="checkbox" id="hideclutter">Remove link to Clutter<br>
+				<input type="checkbox" id="hidescratch">Remove link to Scratch<br>
+				<input type="checkbox" id="hideturbowarp">Remove link to Turbowarp<br>
+				<input type="checkbox" id="autoplay">Enable autoplay
+			</form>
+		</details>
 	</div>
 	<%- include("footer") -%>
 	<script src="/script.js"></script>
@@ -51,6 +61,24 @@
 			document.getElementById("iframe").outerHTML = "<iframe width=\"485\" height=\"402\" id=\"iframe\" align=\"left\" src></iframe>"
 			document.getElementById("layerOntopOfPlayer").outerHTML = ""
 			renderClutter(projects)
+			fetch("/post/clutterStarted", { 
+				method: "PUT",
+				headers: { 'Content-Type':'application/json' },
+				body: JSON.stringify({ id: <%- JSON.stringify(id) -%> })
+			})
+				.then(res => res.text())
+		}
+		document.getElementById("playerI").addEventListener("click", () => { start() })
+
+		//report
+		function report() {
+			fetch("/post/clutterReport", {
+				method: "PUT",
+				headers: { 'Content-Type':'application/json' },
+				body: JSON.stringify({ id: <%- JSON.stringify(id) -%> })
+			})
+				.then(res => res.text())
+			document.getElementsByClassName("report")[0].setAttribute("onclick", "alert('Warning!'); alert('Commiting this action of fraud with void your warranty.'); confirm('Are you sure you want to do this?'); alert(`It doesn't really matter; I was going to not allow you to anyway.`); this.setAttribute(\"onclick\", \"alert('Are you serious?'); alert('NO!');\")")
 		}
 
 		//embed

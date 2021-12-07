@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<%# Type: dynamic 
+		Catorgory: home %>
+<html lang="en-US">
+
+<head>
+	<title>Clutter -- My Stuff</title>
+	<meta name="title" content="Clutter -- Compile Scratch Projects">
+	<meta name="description" content="Clutter is a program to compile Scratch projects">
+	<%- include("headTag") -%>
+</head>
+
+<body>
+	<%- include("header") -%>
+	<div id="content">
+		<div id="my" class="block">
+			<div class="head">
+				My Stuff
+			</div>
+			<div id="clutters">
+				<h1>Loading Clutters...</h1>
+			</div>
+		</div>
+	</div>
+	<%- include("footer") -%>
+	<script type="text/javascript" src="/script.js"></script>
+	<script type="text/javascript">
+		const data = {
+			user: checkLogin()
+		}
+		fetch("/post/getCluttersByUser", { 
+			method: 'PUT', 
+			headers: { 'Content-Type':'application/json' },
+			body: JSON.stringify(data)
+		})
+			.then(res => res.json())
+			.then(data => {
+				let myStuff = document.getElementById("clutters")
+				myStuff.innerHTML = ""
+				data.clutters.forEach(obj => {
+					myStuff.innerHTML += `<div class="project">
+		<a href="/clutters/${obj.id}">
+			<img src="/api/clutters/${obj.id}/thumbnail.png" width="120">
+			<h1 class="projectNameHeading">${obj.name}</h1>
+		</a>
+	</div>`
+				})
+			})
+	</script>
+</body>
+
+</html>

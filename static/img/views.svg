@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny-ps" viewBox="-1 1 402 296">
+	<title>New Project</title>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #ffffff;stroke: #000000;stroke-width: 2 } 
+		.shp1 { fill: #000000;stroke: #000000;stroke-width: 2 } 
+	</style>
+	<path class="shp0" d="M200 296C89.4 296 0 230.29 0 149C0 67.71 89.4 2 200 2C310.6 2 400 67.71 400 149C400 230.29 310.6 296 200 296Z"/>
+	<path class="shp1" d="M199.5 206C167.7 206 142 180.3 142 148.5C142 116.7 167.7 91 199.5 91C231.3 91 257 116.7 257 148.5C257 180.3 231.3 206 199.5 206Z"/>
+</svg>

@@ -109,7 +109,8 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 			if (data["valid"]) {
 				//if valid
 				let user = data["username"]
-				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + 1)))
+				let login = btoa(String(charAppears("1", toBinary(user)) + (toBinary(user).length + user.length * 2)))
+				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + (toBinary(user).length + user.length * 2))))
 				localStorage.setItem("user", data["username"])
 				//shows the user they were logged in
 				setLogin()
@@ -117,6 +118,9 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 				//otherwise, check if they're logged in already
 				setLogin()
 			} else { login.innerHTML = loginLink }
+			setTimeout(() => {
+				location = "./"
+			}, 1000)
 		})
 } else if (userIsnt) {
 	//if the user has a logged in cookie, show that they are logged in.
@@ -126,7 +130,7 @@ if (Object.keys(location.searchtree).includes("privateCode")) {
 function checkLogin() {
 	setLogin()
 	let user = ""
-	if (localStorage.getItem("user") != null | undefined) {
+	if (localStorage.getItem("user") != null|undefined) {
 		user = localStorage.getItem("user")
 	}
 	return user
@@ -143,7 +147,7 @@ function setLogin() {
 		.then(res => res.text())
 		.then(data => {
 			if (data != '') {
-				login.innerHTML = `<a href="/users/${data}"><img src="/api/users/${user}/avartar.png" width="24" style="margin-bottom: -3px;">${data}</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
+				login.innerHTML = `<a href="/users/${data}"><img src="/api/users/${user}/avartar.png" width="24" style="margin-bottom: -3px;">${data}</a> <a href="/mystuff">My Stuff</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
 			} else {
 				logout()
 			}
@@ -173,17 +177,7 @@ window.addEventListener('storage', () => {
 	let want = localStorage.getItem("user")
 	let c = localStorage.getItem("login")
 	if (want != "" && c != "") {
-		fetch("/post/loginReq", {
-			method: "PUT",
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ want: want, c: c })
-		})
-			.then(res => res.text())
-			.then(data => {
-				if (data == '') {
-					logout()
-				}
-			})
+		checkLogin()
 	}
 })
 
@@ -200,4 +194,13 @@ function searchBar(searchText) {
 		return;
 	}
 	location = "/search?q=" + searchText
+}
+
+/*Relating to the footer*/
+function randomClutter() {
+	fetch("/post/randomClutter", { method: "PUT" })
+		.then(res => res.json())
+		.then(data => {
+			location = data.link
+		})
 }

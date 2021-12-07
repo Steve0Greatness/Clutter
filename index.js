@@ -6,11 +6,14 @@ const path = require("path")
 const Database = require("@replit/database")
 const db = new Database()
 const cors = require('cors')
-const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const less = require('less-middleware')
 const request = require('request')
-const port = Math.round(Math.random() * 8000)
-const testProject = { name: "name:)", creator: "Steve0Greatness", included: ["588586405", "487519987"], date: "Sat, Nov 13 2021", thumb: 0, id: 1, remix: [false, "", "", ""] }
+var port = Math.round(Math.random() * 9999)
+if (port < 1000) {
+	port = 1000
+}
+const testProject = { name: "name:)", creator: "Steve0Greatness", included: ["588586405", "487519987"], date: "Sat, Nov 13 2021", thumb: 0, id: 1, remix: [false, "", "", ""], views: 0, reports: 0 }
 const featured = [1]
 const blackListed = []
 const daysOfTheWeek = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -59,7 +62,9 @@ app.use(less(path.join(__dirname, "static"), { force: true }))
 app.use(express.static("static"))
 app.use(favicon(path.join(__dirname, "static", "img", "favicon.ico")))
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+
+//experimental cookie login system
+app.use(cookieParser())
 
 //rendering pages
 app.get('/', (req, res) => {
@@ -81,7 +86,7 @@ app.get('/clutters/:id', (req, res) => {
 	let id = req.params.id
 	db.get(id).then(value => {
 		let key = JSON.parse(value)
-		res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
+		res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], views: key["views"] })
 	}).catch(error => {
 		res.render("404", { path: id, type: 1 })
 	})
@@ -104,7 +109,7 @@ app.get('/users/:name', (req, res) => {
 				}
 				setTimeout(function() {
 					res.render("user", { name: body["username"], made: clutters, id: body["id"] })
-				}, 300)
+				}, keys.length * 400)
 			})
 		}
 	})
@@ -131,6 +136,7 @@ app.get("/about", (req, res) => {
 	res.render("about", { contr: contributers })
 })
 app.get("/getstarted", (req, res) => { res.render("getStarted") })
+app.get("/myStuff", (req, res) => { res.render("myStuff") })
 app.get("/search", (req, res) => {
 	let search = req.query.q
 	let clutters = []
@@ -227,6 +233,8 @@ app.put("/post/clutter", cors(corsOptions), (req, res) => {
 	let date = new Date()
 	finalDate = `${daysOfTheWeek[date.getDay()]}, ${monthsOfTheYear[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`
 	data["date"] = finalDate
+	data.reports = 0
+	data.views = 0
 	if (data["isEdit"]) { data["id"] = data["originalId"] } else { db.list().then(keys => data["id"] = Number(keys[keys.length - 1]) + 1) }
 	data["originalId"] = null
 	setTimeout(function() {
@@ -245,12 +253,53 @@ app.put("/post/comment", cors(corsOptions), (req, res) => {
 app.put("/post/loginReq", cors(corsOptions), (req, res) => {
 	let loginWant = req["body"]["want"]
 	let loginBase64 = req["body"]["c"]
-	let binary = Buffer.from(String(charAppears("1", toBinary(loginWant)) + 1), 'utf-8').toString('base64')
+	let binary = Buffer.from(String(charAppears("1", toBinary(loginWant)) + (toBinary(loginWant).length + loginWant.length * 2)), 'utf-8').toString('base64')
 	if (binary == loginBase64 && !(blackListed.includes(loginWant.toUpperCase()))) {
 		res.send(loginWant)
 	} else {
 		res.send('')
 	}
+})
+app.put("/post/getCluttersByUser", cors(corsOptions), (req, res) => {
+	let name = req.body.user
+	let clutters = []
+	db.list().then(keys => {
+		for (var i in keys) {
+			db.get(String(keys[i])).then(value => {
+				let data = JSON.parse(value)
+				if (data["creator"].toUpperCase() == name.toUpperCase()) {
+					clutters.push(data)
+				}
+			})
+		}
+		setTimeout(function() {
+			res.send({ clutters: clutters })
+		}, keys.length * 300)
+	})
+})
+app.put("/post/randomClutter", cors(corsOptions), (req, res) => {
+	db.list().then(keys => {
+		res.send({ link: `/clutters/${keys[Math.floor(Math.random() * keys.length)]}` })
+	})
+})
+app.put("/post/clutterStarted", cors(corsOptions), (req, res) => {
+	let id = String(req.body["id"])
+	db.get(id).then(value => {
+		let parsed = JSON.parse(value)
+		parsed.views++
+		db.set(id, JSON.stringify(parsed))
+	})
+})
+app.put("/post/clutterReport", cors(corsOptions), (req, res) => {
+	let id = String(req.body["id"])
+	db.get(id).then(value => {
+		let parsed = JSON.parse(value)
+		parsed.reports++
+		if (parsed.reports >= 10) {
+			console.warn("Please look at " + id)
+		}
+		db.set(id, JSON.stringify(parsed))
+	})
 })
 app.all("/post/*", (req, res) => {
 	sendOtherCodeError(405, res, req.method)
@@ -275,7 +324,7 @@ app.get("/debug/405", (req, res) => {
 })
 app.get("/debug/Clutter", (req, res) => {
 	let key = testProject
-	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: key["id"], creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
+	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: key["id"], creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], views: key["views"] })
 })
 
 //errors
