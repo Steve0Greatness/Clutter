@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%# Type: dynamic 
-		Catorgory: home %>
+		Catorgory: personal %>
 <html lang="en-US">
 
 <head>
@@ -18,35 +18,19 @@
 				My Stuff
 			</div>
 			<div id="clutters">
-				<h1>Loading Clutters...</h1>
+				<% if (clutters.length == 0) { %><h1>It seems that you've made no clutters.</h1><% } %>
+				<% clutters.forEach(elm => { %>
+				<a href="/clutters/<%- elm.id -%>">
+					<img src="/api/clutters/<%- elm.id -%>/thumbnail.png" width="120">
+					<h1 class="projectNameHeading"><%- elm.name -%></h1>
+				</a>
+				<img src="/img/views.svg" alt="views" width="16"> views: <%- elm.views -%>
+				<% }) %>
 			</div>
 		</div>
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
-	<script type="text/javascript">
-		const data = {
-			user: checkLogin()
-		}
-		fetch("/post/getCluttersByUser", { 
-			method: 'PUT', 
-			headers: { 'Content-Type':'application/json' },
-			body: JSON.stringify(data)
-		})
-			.then(res => res.json())
-			.then(data => {
-				let myStuff = document.getElementById("clutters")
-				myStuff.innerHTML = ""
-				data.clutters.forEach(obj => {
-					myStuff.innerHTML += `<div class="project">
-		<a href="/clutters/${obj.id}">
-			<img src="/api/clutters/${obj.id}/thumbnail.png" width="120">
-			<h1 class="projectNameHeading">${obj.name}</h1>
-		</a>
-	</div>`
-				})
-			})
-	</script>
 </body>
 
 </html>

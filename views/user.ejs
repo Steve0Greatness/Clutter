@@ -18,6 +18,7 @@
 			<tr><td><img src="/api/users/<%- name -%>/avartar.png" id="userAvatar"></td><td id="userName"><%- name -%></td></tr>
 		</table>
 		</a>
+		<button class="follow" follow="false">Follow</button><br><br>
 		<!--<div class="block" style="display: inline-block;"><div class="head">Featured Clutter</div></div><br><br>-->
 		<% if (made.length !== 0) { %><div id="newest" class="block" style="width: fit-content;">
 			<div class="head">
@@ -49,6 +50,27 @@
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>
+	<script type="text/javascript">
+		let followButton = document.getElementsByClassName("follow")[0]
+		let followedPeople = JSON.parse(localStorage.getItem("follows"))
+		if (followedPeople.includes(<%- JSON.stringify(name) -%>)) {
+			followButton.innerHTML = "Unfollow"
+			followButton.className = "follow un"
+			followButton.setAttribute("follow", "true")
+		}
+		followButton.onclick = () => {
+			if (followButton.getAttribute("follow") == "true") {
+				followButton.innerHTML = "Follow"
+				followButton.className = "follow"
+				followButton.setAttribute("follow", "false")
+			} else {
+				followButton.innerHTML = "Unfollow"
+				followButton.className = "follow un"
+				followButton.setAttribute("follow", "true")
+			}
+			follow(<%- JSON.stringify(name) -%>)
+		}
+	</script>
 </body>
 
 </html>

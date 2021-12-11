@@ -100,35 +100,7 @@ var login = document.getElementById("login")
 var userIsnt = localStorage.getItem("user") != null | ''
 
 //check if they have logged in already
-login.innerHTML = loginLink
-if (Object.keys(location.searchtree).includes("privateCode")) {
-	//check if they have gone though varifacation.
-	fetch("https://fluffyscratch.hampton.pw/auth/verify/v2/" + location.searchtree["privateCode"])
-		.then(blob => blob.json())
-		.then(data => {
-			if (data["valid"]) {
-				//if valid
-				let user = data["username"]
-				let login = btoa(String(charAppears("1", toBinary(user)) + (toBinary(user).length + user.length * 2)))
-				localStorage.setItem("login", btoa(String(charAppears("1", toBinary(user)) + (toBinary(user).length + user.length * 2))))
-				localStorage.setItem("user", data["username"])
-				//shows the user they were logged in
-				setLogin()
-			} else if (userIsnt) {
-				//otherwise, check if they're logged in already
-				setLogin()
-			} else { login.innerHTML = loginLink }
-			setTimeout(() => {
-				location = "./"
-			}, 1000)
-		})
-} else if (userIsnt) {
-	//if the user has a logged in cookie, show that they are logged in.
-	setLogin()
-} else { login.innerHTML = loginLink }
-
 function checkLogin() {
-	setLogin()
 	let user = ""
 	if (localStorage.getItem("user") != null|undefined) {
 		user = localStorage.getItem("user")
@@ -137,21 +109,7 @@ function checkLogin() {
 }
 
 function setLogin() {
-	let user = localStorage.getItem("user")
-	let logina = localStorage.getItem("login")
-	fetch("/post/loginReq", {
-		method: "PUT",
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ want: user, c: logina })
-	})
-		.then(res => res.text())
-		.then(data => {
-			if (data != '') {
-				login.innerHTML = `<a href="/users/${data}"><img src="/api/users/${user}/avartar.png" width="24" style="margin-bottom: -3px;">${data}</a> <a href="/mystuff">My Stuff</a> <a title="logout" onclick="logout()"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a>`
-			} else {
-				logout()
-			}
-		})
+
 }
 
 const charAppears = (char, inside) => {
@@ -171,21 +129,9 @@ const toBinary = (str = '') => {
 	return res;
 }
 
-
-//when updated, make sure it's correct
-window.addEventListener('storage', () => {
-	let want = localStorage.getItem("user")
-	let c = localStorage.getItem("login")
-	if (want != "" && c != "") {
-		checkLogin()
-	}
-})
-
 //log them out
 function logout() {
-	login.innerHTML = loginLink
-	localStorage.removeItem("user")
-	localStorage.removeItem("login")
+	location = "/?logout=true"
 }
 
 /*Relating to Searching*/
@@ -203,4 +149,24 @@ function randomClutter() {
 		.then(data => {
 			location = data.link
 		})
+}
+
+/*Relating to Following*/
+function follow(user) {
+	if (!Object.keys(localStorage).includes("follows")) { localStorage.setItem("follows", "[]") }
+	let parsed = JSON.parse(localStorage.getItem("follows"))
+	if (parsed.includes(user)) {
+		parsed = parsed.filter((value, index, arr) => {
+			return index != arr.indexOf(user)
+		})
+	} else {
+		parsed.push(user)
+	}
+	localStorage.setItem("follows", JSON.stringify(parsed))
+}
+
+function getActivities() {
+	JSON.parse(localStorage.follows).forEach(elm => {
+		console.log("getting activities for " + elm)
+	})
 }

@@ -27,7 +27,7 @@
 		<button onclick="shareProject()">Save</button>
 		<a href="/clutters/<%= id %>"><button onclick="beforeunload(false)">See Page</button></a>
 		<input type="text" id="clutterName" onchange="beforeunload(true)" placeholder="Clutter Name" value="<%= cName %>">
-		<input type="number" onchange="beforeunload(true)" placeholder="Project's Thumbnail Shown" value="<%= thum %>" id="thumbnailNum">
+		<input type="number" onchange="beforeunload(true)" placeholder="Project's Thumbnail Shown" value="<%= thum + 1 %>" id="thumbnailNum">
 		<% } %><br><br>
 		<!--editing part of the editor-->
 		<button onclick="submitClutter()">Run</button> <button onclick="addInput()">add</button> <button onclick="removeInput()">remove</button><br>
@@ -50,7 +50,7 @@
 		submitClutter()
 		<% } %>
 		function shareProject() {
-			if (localStorage.getItem("user") == null|undefined) {
+			if (<%- JSON.stringify(loginName) -%> == "not logged in") {
 				alert("you must be logged in to share a project")
 			} else {
 				if (document.getElementById("clutterName").value|document.getElementById("thumbnailNum").value == '') { 
@@ -79,10 +79,14 @@
 				beforeunload(false)
 				let isEdit = false
 				<% if (isPre) { %>
-				if (checkLogin() == <%- JSON.stringify(creator) -%>) {
+				let isRemix = true
+				if (<%- JSON.stringify(loginName) -%> == <%- JSON.stringify(creator) -%>) {
 					isEdit = true
+					<% if (remixStuff[0]) { %>
+					isRemix = false
+					<% } %>
 				}
-				var originalId = <%- JSON.stringify(id) -%>
+				var originalId = <%- JSON.stringify(remixStuff[1]) -%>
 				<% } else { %>
 				var originalId = null
 				<% } %>
@@ -90,8 +94,8 @@
 					name: document.getElementById("clutterName").value,
 					thumb: document.getElementById("thumbnailNum").value - 1,
 					included: formValues,
-					creator: localStorage.getItem("user"),
-					<% if (isPre) { %>remix: [true, <%- JSON.stringify(id) -%>, <%- JSON.stringify(creator) -%>, <%- JSON.stringify(cName) -%>]<% } else { %>remix: [false, "", "", ""]<% } %>,
+					creator: <%- JSON.stringify(loginName) -%>,
+					<% if (isPre) { %>remix: [isRemix, <%- JSON.stringify(remixStuff[1]) -%>, <%- JSON.stringify(remixStuff[2]) -%>, <%- JSON.stringify(remixStuff[3]) -%>]<% } else { %>remix: [false, "", "", ""]<% } %>,
 					isEdit: isEdit,
 					originalId: originalId
 				}

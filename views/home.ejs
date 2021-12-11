@@ -14,7 +14,19 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
-		Please note that the backend is still being set up, clutters made can't be saved of shared. However, it should be up soon.
+		<div id="newsSection">
+			<div id="news" class="block">
+				<div class="head">
+					Clutter News
+				</div>
+				<% news.forEach(elm => { %>
+				<div class="newsBorder">
+					<h1 class="projectNameHeading"><a href="<%- elm.link -%>"><%- elm.name -%></a></h1>
+					<%- elm.body -%>
+				</div>
+				<% }) %>
+			</div>
+		</div>
 		<div id="featured" class="block">
 			<div class="head">
 				Featured Clutters

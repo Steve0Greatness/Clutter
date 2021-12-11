@@ -31,6 +31,12 @@
 		 <a href="/edit/<%= id %>"><button>See Inside</button></a> <button onclick="embedDispaly('block')">Share</button> <button onclick="report()" class="report">Report</button><br>
 		<input type="text" id="commentBox" maxlength="200"> <button onclick="postComment()">Submit</button>
 		<div id="comments">
+			<% for (let i = 0; i < comments.length; i++) { %>
+			<div class="comment">
+				<div class="commentUser"><a href="/users/<%- comments[comments.length - (i + 1)].user -%>"><%- comments[comments.length - (i + 1)].user -%></a></div>
+				<%- comments[comments.length - (i + 1)].body -%>
+			</div>
+			<% } %>
 		</div>
 	</div>
 	<div id="embed">
@@ -120,6 +126,7 @@
 
 		//comment sending
 		async function postComment() {
+			checkLogin()
 			if (localStorage.getItem("user") == null|undefined) {
 				alert("You need to be loged in to post comments")
 				return;

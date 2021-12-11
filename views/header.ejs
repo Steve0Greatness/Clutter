@@ -1,4 +1,4 @@
-<%# Type: static
+<%# Type: dynamic
 		Catorgory: element %>
 <header id="head">
 <a href="/" id="logo" title="clutter" name="clutter" alt="clutter"></a>
@@ -7,5 +7,5 @@
 <a href="/getstarted">Get Started</a>
 <form onsubmit="searchBar(document.getElementById('searchText').value); return false;" style="display:inline-block">
 <lable for="searchText"><input type="submit" class="search input" value="Search"></lable><input name="search" placeholder="Search" type="text" class="search" id="searchText" alt="search"></form>
-<span id="login"></span>
+<span id="login"><% if (loginName != "not logged in") { %><a href="/users/<%- loginName -%>"><img src="/api/users/<%- loginName -%>/avartar.png" width="24" style="margin-bottom: -3px;"><%- loginName -%></a> <a href="/mystuff">My Stuff</a> <a title="logout" href="?logout=true"><img class="logout" src="/img/logout.svg" alt="logout" width="25" height="25"></a><% } else { %><a href="https://fluffyscratch.hampton.pw/auth/getKeys/v2?redirect=<%- Buffer.from("clutter.stevesgreatness.repl.co" + pathname, "utf-8").toString("base64") -%>">Login with FluffyScratch</a><% } %></span>
 </header>

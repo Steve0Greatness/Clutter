@@ -29,6 +29,10 @@
 	--buttonReportBorder: #700;
 	--buttonReportColor: #fff;
 	--contentMinHeight: 82.5%;
+	--buttonFollowBack: #0af;
+	--buttonFollowBorder: #09e;
+	--buttonFollowColor: #000;
+	--bottomNewsBorder: #000;
 	font-family: sans-serif;
 }
 
@@ -86,6 +90,7 @@ header#head {
 	font-size: 1.5em;
 	position: sticky;
 	top: 0;
+	z-index: 100;
 	a {
 		margin-left: .5em;
 		margin-right: .5em;
@@ -149,6 +154,9 @@ a:any-link {
 		font-size: 1.5em;
 		padding: .25em;
 	}
+	&.inline {
+		display: inline-block;
+	}
 }
 
 .project {
@@ -164,9 +172,10 @@ a:any-link {
 	.creator {
 		font-size: .95em;
 	}
-	.projectNameHeading {
-		margin: 0;
-	}
+}
+
+.projectNameHeading {
+	margin: 0;
 }
 
 /*Footer*/
@@ -192,6 +201,17 @@ input, button {
 		background: var(--buttonReportBack);
 		color: var(--buttonReportColor);
 		border-color: var(--buttonReportBorder);
+	}
+	&.follow {
+		background: url(/img/follow.svg) left no-repeat var(--buttonFollowBack);
+		background-size: 1em;
+		color: var(--buttonFollowColor);
+		border-color: var(--buttonFollowBorder);
+		padding-left: 1em;
+		&.un {
+			filter: invert(1);
+			color: var(--buttonUnFollowColor);
+		}
 	}
 }
 
@@ -262,7 +282,7 @@ center#notfound {
 	.commentUser {
 		background: var(--commentUserBackground);
 		display: initial;
-		margin-right: 1em;
+		mrgin-right: 1em;
 		padding: 5px;
 		margin-top: -5px;
 		height: 40px;
@@ -332,7 +352,7 @@ table.viewTable th {
 	width: 200px;
 	height: 200px;
 	cursor: pointer;
-	z-index: 100;
+	z-index: 99;
 	&.normalPage {
 		top: round(402px/4);
 		left: round(485px/3.5);
@@ -377,6 +397,27 @@ table.viewTable th {
 
 #views {
 	background: url("/img/views.svg") no-repeat left;
-	padding-left: 1.5em;
+	background-size: .93em;
+	padding-left: 1.25em;
 	margin-left: 1em;
+}
+
+/*noscript*/
+.noscript {
+	position: static;
+	top: 0;
+	background: var(--primary);
+	color: var(--primaryText);
+	width: 100%;
+	z-index: 100;
+	overflow: hidden;
+}
+
+/*MAIN PAGE*/
+.newsBorder {
+	border-bottom: var(--bottomNewsBorder) 1px solid;
+}
+
+#newsSection {
+	margin-bottom: 1em;
 }

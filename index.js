@@ -1,23 +1,38 @@
-//Setting constants, and adding libriaries
-const express = require('express')
-const app = express()
-const favicon = require('serve-favicon')
-const path = require("path")
-const Database = require("@replit/database")
-const db = new Database()
-const cors = require('cors')
-const cookieParser = require('cookie-parser')
-const less = require('less-middleware')
-const request = require('request')
+//libriaries
+/*Important*/
+const express = require('express'),
+	app = express(),
+	Database = require("@replit/database"),
+	db = new Database(),
+	cors = require('cors'),
+	/*Not as important*/
+	favicon = require('serve-favicon'),
+	path = require("path"),
+	cookieParser = require('cookie-parser'),
+	less = require('less-middleware'),
+	request = require('request'),
+	url = require('url'),
+
+	//Clutter things
+	testProject = { name: "name:)", creator: "Steve0Greatness", included: ["588586405", "487519987"], date: "Sat, Nov 13 2021", thumb: 0, id: 1, remix: [false, "", "", ""], views: 3, reports: 0, comments: [] },
+	featured = [1],
+
+	//banned users, doesn't work yet.
+	blackListed = [],
+
+	//date
+	daysOfTheWeek = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"],
+	monthsOfTheYear = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
+
+	//news
+	news = [{ link: "#", name: "Clutter Almost Fully Open", body: "As of the time of writing this, Clutter is almost fully ready. You can currently post Clutters." }]
+
+//feel free to make the port not be random
 var port = Math.round(Math.random() * 9999)
 if (port < 1000) {
 	port = 1000
 }
-const testProject = { name: "name:)", creator: "Steve0Greatness", included: ["588586405", "487519987"], date: "Sat, Nov 13 2021", thumb: 0, id: 1, remix: [false, "", "", ""], views: 0, reports: 0 }
-const featured = [1]
-const blackListed = []
-const daysOfTheWeek = ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"]
-const monthsOfTheYear = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 //when testing, add the domain to the array below VVV. Make sure to remove it before you make a Pull Request.
 const whitelist = ['https://clutter.stevesgreatness.repl.co']
 const corsOptions = {
@@ -64,7 +79,32 @@ app.use(favicon(path.join(__dirname, "static", "img", "favicon.ico")))
 app.use(express.json())
 
 //experimental cookie login system
-app.use(cookieParser())
+app.use(cookieParser("NBrKs14mvMM7EOv4hlYA"))
+app.use((req, res, next) => {
+	if (Object.keys(req.query).includes("privateCode") && !(Object.keys(req.signedCookies).includes("user")) && !(Object.keys(req.signedCookies).includes("login"))) {
+		request.get("https://fluffyscratch.hampton.pw/auth/verify/v2/" + req.query.privateCode, { json: true }, (err, resp, body) => {
+			if (body.valid) {
+				res.cookie("loggedIn", true, { signed: true })
+				res.cookie("user", body.username, { signed: true })
+				res.cookie("login", Buffer.from(String(charAppears("1", toBinary(body.username)) + (toBinary(body.username).length + body.username.length * 2)), 'utf-8').toString('base64'), { signed: true })
+				res.redirect(url.parse(req.url).pathname)
+				next()
+			} else {
+				res.cookie("loggedIn", false, { signed: true })
+				res.redirect(url.parse(req.url).pathname)
+				next()
+			}
+		})
+	} else if (Object.keys(req.query).includes("logout")) {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+		res.redirect(url.parse(req.url).pathname)
+		next()
+	} else {
+		next()
+	}
+})
 
 //rendering pages
 app.get('/', (req, res) => {
@@ -72,28 +112,67 @@ app.get('/', (req, res) => {
 	for (let i = 0; i < featured.length; i++) {
 		db.get(String(featured[i])).then(value => sendData.push(JSON.parse(value)))
 	}
-	setTimeout(() => { res.render("home", { featured: sendData }) }, featured.length * 400)
+	let username = "not logged in"
+	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+	}
+	setTimeout(() => { res.render("home", { featured: sendData, loginName: username, pathname: "", news: news }) }, featured.length * 400)
 })
-app.get('/create', (req, res) => { res.render("editor", { isPre: false, name: req.body.name }) })
+app.get('/create', (req, res) => { 
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+	}
+	res.render("editor", { isPre: false, name: req.body.name, loginName: username, pathname: "/create" })
+})
 app.get('/edit/:id', (req, res) => {
 	let id = req.params.id
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+	}
 	db.get(id).then(value => {
 		let key = JSON.parse(value)
-		res.render("editor", { isPre: true, proj: key["included"], cName: key["name"], thum: key["thumb"], id: id, creator: key["creator"] })
+		res.render("editor", { isPre: true, proj: key["included"], cName: key["name"], thum: key["thumb"], id: id, creator: key["creator"], remixStuff: key.remix, loginName: username, pathname: "/edit" })
 	})
 })
 app.get('/clutters/:id', (req, res) => {
 	let id = req.params.id
+	let username = "not logged in"; 
+	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+	}
 	db.get(id).then(value => {
 		let key = JSON.parse(value)
-		res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], views: key["views"] })
+		res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], views: key["views"], comments: key.comments, loginName: username, pathname: "/clutters/" + id })
 	}).catch(error => {
-		res.render("404", { path: id, type: 1 })
+		res.render("404", { path: id, type: 1, loginName: username, pathname: "/clutters/" + id })
 	})
 })
 app.get('/users/:name', (req, res) => {
 	let name = req.params.name
 	let clutters = []
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+	}
 	request.get("https://scratchdb.lefty.one/v3/user/info/" + name, { json: true }, (err, resp, body) => {
 		if (Object.keys(body).includes("error")) {
 			res.render("404", { path: name, type: 2 })
@@ -108,7 +187,7 @@ app.get('/users/:name', (req, res) => {
 					})
 				}
 				setTimeout(function() {
-					res.render("user", { name: body["username"], made: clutters, id: body["id"] })
+					res.render("user", { name: body["username"], made: clutters, id: body["id"], loginName: username, pathname: "/users/" + name })
 				}, keys.length * 400)
 			})
 		}
@@ -125,6 +204,13 @@ app.get("/about", (req, res) => {
 		contributes: "use https://allcontributors.org/docs/en/emoji-key to add your what you did"
 	}
 	*/
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+	}
 	const contributers = [{
 		info: {
 			name: "Steve0Greatness",
@@ -133,13 +219,50 @@ app.get("/about", (req, res) => {
 		},
 		contributes: "🎨🤔💻🖋🚇"
 	}]
-	res.render("about", { contr: contributers })
+	res.render("about", { contr: contributers, loginName: username, pathname: "/about" })
 })
-app.get("/getstarted", (req, res) => { res.render("getStarted") })
-app.get("/myStuff", (req, res) => { res.render("myStuff") })
+app.get("/getstarted", (req, res) => { 
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("getStarted", { loginName: username, pathname: "/getstarted" })
+})
+app.get("/myStuff", (req, res) => {
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {
+		res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")
+		res.render("403", { loginName: username, pathname: "/mystuff" })
+	}
+	let myClutters = []
+	db.list().then(keys => {
+		for (let i = 1; i < keys.length + 1; i++) {
+			db.get(`${i}`).then(value => {
+				let parsed = JSON.parse(value)
+				if (parsed.creator == req.signedCookies.user) {
+					myClutters.push(parsed)
+				}
+			}).catch(err => {
+				console.error(err)
+			})
+		}
+		setTimeout(() => {
+			res.render("myStuff", { loginName: username, pathname: "/mystuff", clutters: myClutters }) 
+		}, keys.length * 500)
+	})
+})
 app.get("/search", (req, res) => {
 	let search = req.query.q
 	let clutters = []
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
 	db.list().then(keys => {
 		for (let i = 1; i < keys.length + 1; i++) {
 			db.get(String(i)).then(value => {
@@ -148,22 +271,34 @@ app.get("/search", (req, res) => {
 			})
 		}
 		setTimeout(function() {
-			res.render("search", { q: search, returned: clutters })
+			res.render("search", { q: search, returned: clutters, loginName: username, pathname: "/search?q=" + search })
 		}, keys.length * 250)
 	})
 })
 app.get("/embed/:id", cors(), (req, res) => {
 	let id = req.params.id
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
 	db.get(id).then(value => {
 		let key = JSON.parse(value)
-		res.render('embed', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3] })
+		res.render('embed', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: id, creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], loginName: username, pathname: "/embed/" + id })
 	}).catch(error => {
-		res.render("404", { path: id, type: 1 })
+		res.render("404", { path: id, type: 1, pathname: "/embed/" + id })
 	})
 })
 
 //api(note, this would have been a subdomain but replit doesn't support them)
-app.get("/api/docs", cors(), (req, res) => { res.render("api") })
+app.get("/api/docs", cors(), (req, res) => { 
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("api", { pathname: "/api/docs", loginName: username }) 
+})
 app.get("/api/clutters/:id", cors(), (req, res) => {
 	let id = req.params.id
 	db.get(id).then(value => {
@@ -182,7 +317,7 @@ app.get("/api/clutters/:id/thumbnail.png", cors(), (req, res) => {
 		let parse = JSON.parse(value)
 		res.statusCode = 302;
 		res.setHeader("Location", "https://uploads.scratch.mit.edu/projects/thumbnails/" + parse["included"][parse["thumb"]] + ".png")
-		res.end();
+		res.end()
 	}).catch(error => { res.send({ notice: "couldn't find Clutter!", error: "404" }) })
 })
 app.get('/api/users/:name', cors(), (req, res) => {
@@ -235,11 +370,12 @@ app.put("/post/clutter", cors(corsOptions), (req, res) => {
 	data["date"] = finalDate
 	data.reports = 0
 	data.views = 0
+	data.comments = []
 	if (data["isEdit"]) { data["id"] = data["originalId"] } else { db.list().then(keys => data["id"] = Number(keys[keys.length - 1]) + 1) }
 	data["originalId"] = null
 	setTimeout(function() {
 		let dbData = JSON.stringify(data)
-		//db.set(String(data["id"]), dbData)
+		db.set(String(data["id"]), dbData)
 		res.send(data)
 	}, 1000)
 })
@@ -249,6 +385,13 @@ app.put("/post/comment", cors(corsOptions), (req, res) => {
 				<div class="commentUser"><a href="/users/${data["user"]}">${data["user"]}</a></div>
 				${data["body"]}
 			</div>`)
+	db.get(String(data.for)).then(value => {
+		let parsed = JSON.parse(value)
+		if (!(parsed.comments.length >= 10)) {
+			parsed.comments.push({ user: data.user, body: data.body })
+			//db.set(String(data.for), JSON.stringify(parsed))
+		}
+	})
 })
 app.put("/post/loginReq", cors(corsOptions), (req, res) => {
 	let loginWant = req["body"]["want"]
@@ -301,42 +444,92 @@ app.put("/post/clutterReport", cors(corsOptions), (req, res) => {
 		db.set(id, JSON.stringify(parsed))
 	})
 })
+app.put("/post/logout", cors(corsOptions), (req, res) => {
+	res.cookie("user", null)
+	res.cookie("login", null)
+	res.cookie("loggedIn", false, { signed: true })
+})
 app.all("/post/*", (req, res) => {
 	sendOtherCodeError(405, res, req.method)
 })
 
 //debug pages
 app.get("/debug/", (req, res) => {
-	res.render("debugindex")
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("debugindex", {loginName: username, pathname: "/debug/"})
 })
 app.get("/debug/project-404", (req, res) => {
-	res.render("404", { path: 606852261, type: 1 })
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("404", { path: 606852261, type: 1, loginName: username, pathname: "/debug/project-404" })
 })
 app.get("/debug/500", (req, res) => {
-	res.render("500")
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("500", { loginName: username, pathname: "/debug/500" })
 })
 app.get("/debug/403", (req, res) => {
-	res.render("403")
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("403", { loginName: username, pathname: "/debug/403" })
 })
 app.get("/debug/405", (req, res) => {
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
 	let method = req.query.method.toUpperCase()
-	res.render("405", { method: method })
+	res.render("405", { method: method, loginName: username, pathname: "/debug/405" })
 })
 app.get("/debug/Clutter", (req, res) => {
 	let key = testProject
-	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: key["id"], creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], views: key["views"] })
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render('clutter', { cName: key["name"], proj: key["included"], dateP: key["date"], thum: key["thumb"], id: key["id"], creator: key["creator"], remix: key["remix"][0], original: key["remix"][1], originalCreator: key["remix"][2], originalName: key["remix"][3], views: key["views"], loginName: username, comments: key["comments"], pathname: "/debug/Clutter" })
 })
 
 //errors
 app.use(function(req, res) {
-	res.render("404", { path: req.path, type: 0 })
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.render("404", { path: req.path, type: 0, loginName: username, pathname: req.path })
 })
 app.use(function(err, req, res, next) {
-	console.error(err.stack);
-	res.status(500).render("500")
+	console.error(err.stack)
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.status(500).render("500", { loginName: username, pathname: req.path })
 })
 function sendOtherCodeError(error = 404, res, method) {
-	res.status(error).render(String(error), { method: method })
+	let username = "not logged in"; 	if (req.signedCookies.user != null|undefined && req.signedCookies.login == Buffer.from(String(charAppears("1", toBinary(req.signedCookies.user)) + (toBinary(req.signedCookies.user).length + req.signedCookies.user.length * 2)), 'utf-8').toString('base64')) {
+		username = req.signedCookies.user
+	} else {res.cookie("loggedIn", false, { signed: true })
+		res.clearCookie("user")
+		res.clearCookie("login")}
+	res.status(error).render(String(error), { method: method, loginName: username, pathname: req.path })
 }
 
 //listening for a sever connection
@@ -346,14 +539,4 @@ app.listen(port, () => {
 
 /*
 inorder to use arrays, objects, and strings in static ejs files, use JSON.stringify(varName)
-
-api layout plan:
-1: {
-	"id": #,
-	"name": "name:)",
-	"included": [project urls],
-	"date": "date posted",
-	"creator": "creator name",
-	"thumb": #
-}
 */

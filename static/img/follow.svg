@@ -1,0 +1,9 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+	<title>New Project</title>
+	<style>
+		tspan { white-space:pre }
+		.s0 { fill: #ffffff } 
+	</style>
+	<path id="Shape 1" class="s0" d="m199.5 565c-91.52 0-165.5-73.98-165.5-165.5c0-91.52 73.98-165.5 165.5-165.5c91.52 0 165.5 73.98 165.5 165.5c0 91.52-73.98 165.5-165.5 165.5z" />
+	<path id="Shape 2" class="s0" d="m200 310c-72.44 0-131-58.56-131-131c0-72.44 58.56-131 131-131c72.44 0 131 58.56 131 131c0 72.44-58.56 131-131 131z" />
+</svg>
