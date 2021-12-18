@@ -14,7 +14,8 @@
 		<h1>About</h1>
 		This website is a project by <a href="//scratch.mit.edu/users/Steve0Greatness">@Steve0Greatness</a>, but if you'd like to help, feel free to... <a href="//github.com/Steve0Greatness/clutter">please</a>.
 		<h2>Packages</h2>
-		These packages are packages for <a href="//nodejs.com"><img src="https://nodejs.org/static/images/favicons/favicon.ico" width="16" height="16">NodeJS</a>. I'll try to use their docs sites, but if they don't have one, then I'll link to their <a href="//npmjs.com"><img src="https://static.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png" width="16" height="16">NPM</a> pages.
+		<div>Note: these are just the packages refered to in the the program's <span class="code">package.json</span>, you can find all of them on <a href="https://github.com/Steve0Greatness/Clutter/network/dependencies">The dependency graph</a> on github.(note: most of them are auto installed by Replit)</div>
+		These packages are packages for <a href="//nodejs.com"><img src="/thirdparty/i/bm9kZWpzLm9yZy9zdGF0aWMvaW1hZ2VzL2Zhdmljb25zL2Zhdmljb24uaWNv" width="16" height="16">NodeJS</a>. I'll try to use their docs sites, but if they don't have one, then I'll link to their <a href="//npmjs.com"><img src="/thirdparty/i/c3RhdGljLm5wbWpzLmNvbS9iMGYxYTgzMTgzNjMxODVjYzJlYTZhNDBhYzIzZWViMi5wbmc=" width="16" height="16">NPM</a> pages.
 		<table class="viewTable">
 			<thead>
 				<tr>
@@ -23,10 +24,10 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><a href="//expressjs.com"><img src="https://expressjs.com/images/favicon.png" width="16" height="16">Express</a></td> <td>One of, if not the most used server hosting NodeJS packages. It's easier then <a href="https://nodejs.org/api/http.html">HTTP</a></td>
+					<td><a href="//expressjs.com"><img src="/thirdparty/i/ZXhwcmVzc2pzLmNvbS9pbWFnZXMvZmF2aWNvbi5wbmc=" width="16" height="16">Express</a></td> <td>One of, if not the most used server hosting NodeJS packages. It's easier then <a href="https://nodejs.org/api/http.html">HTTP</a></td>
 				</tr>
 				<tr>
-					<td><a href="//ejs.co"><img src="https://ejs.co/favicon.svg" width="16" height="16">EJS</a></td> <td>Lets you create template pages, or pages that can be effected by the backend.</td>
+					<td><a href="//ejs.co"><img src="/thirdparty/i/ZWpzLmNvL2Zhdmljb24uc3Zn" width="16" height="16">EJS</a></td> <td>Lets you create template pages, or pages that can be effected by the backend.</td>
 				</tr>
 				<tr>
 					<td><a href="//www.npmjs.com/package/serve-favicon">serve-favicon</a></td> <td>Uses Caching to tell the browser that the page <span class="code">/favicon.ico</span> is whatever ico file from whatever folder you want</td>
@@ -35,13 +36,13 @@
 					<td><a href="//nodejs.org/api/path.html">Path</a></td> <td>Allows you to do things with paths/to/files</td>
 				</tr>
 				<tr>
-					<td><a href="//blog.replit.com/database"><img src="https://replit.com/public/icons/favicon-196.png" width="16" height="16">Replit Database</a></td> <td>It lets you create a database in <a href="//replit.com">Replit</a></td>
+					<td><a href="//blog.replit.com/database"><img src="/thirdparty/i/cmVwbGl0LmNvbS9wdWJsaWMvaWNvbnMvZmF2aWNvbi0xOTYucG5n" width="16" height="16">Replit Database</a></td> <td>It lets you create a database in <a href="//replit.com">Replit</a></td>
 				</tr>
 				<tr>
 					<td><a href="//www.npmjs.com/package/body-parser">body-parser</a></td> <td>Node.js body parsing middleware</td>
 				</tr>
 				<tr>
-					<td><a href="//www.npmjs.com/package/less-middleware"><img src="https://lesscss.org/public/ico/favicon.ico" width="16" height="16">less-middleware</a></td> <td>Compiles <a href="//lesscss.org/"><img src="https://lesscss.org/public/ico/favicon.ico" width="16" height="16">Less</a></td>
+					<td><a href="//www.npmjs.com/package/less-middleware"><img src="/thirdparty/i/bGVzc2Nzcy5vcmcvcHVibGljL2ljby9mYXZpY29uLmljbw==" width="16" height="16">less-middleware</a></td> <td>Compiles <a href="//lesscss.org/"><img src="/thirdparty/i/bGVzc2Nzcy5vcmcvcHVibGljL2ljby9mYXZpY29uLmljbw==" width="16" height="16">Less</a></td>
 				</tr>
 				<tr>
 					<td><a href="https://www.npmjs.com/package/cors">Cors</a></td> <td>Allows the use of <a href="https://developer.mozilla.org/en-US/docs/Glossary/CORS">cors</a> in Express</td>
@@ -71,9 +72,8 @@
 			<tr>
 				<td>
 					<h1>
-						<a href="<%- element["info"]["link"] -%>">
-							<img src="<%- element["info"]["avartar"] -%>" width="24" alt="<%- element["info"]["name"] -%>">
-							<%- element["info"]["name"] -%>
+						<a href="<%- element.info.link -%>">
+							<img src="/thirdparty/i/<%- Buffer.from(element.info.avartar.slice(8), "utf8").toString("base64") -%>" width="24" alt="<%- element["info"]["name"] -%>"><%- element["info"]["name"] -%>
 						</a>
 					</h1>
 				</td>
@@ -89,6 +89,7 @@
 			<li>The 404 page has an edited image of the taco wizard from the Scratch costume library, called <a href="/img/errors/Dark-Taco.svg">Dark-Taco.svg</a></li>
 			<li>Internal Server Issues' image called <a href="/img/errors/Ghosty.svg">Ghosty.svg</a> is from <a href="https://openmoji.org/">openmoji</a></li>
 			<li>The 403 error page's image, <a href="/img/errors/BlueBird.jpeg">BlueBird.jpeg</a>, is from <a href="https://en.wikipedia.org/">Wikipedia</a>'s page about the <a href="https://en.wikipedia.org/wiki/Mountain_bluebird">mountain bluebird</a> </li>
+			<li><a href="/img/cookie.png">cookie.png</a> is from <a href="https://orteil.dashnet.org/cookieclicker/">Cookie Clicker</a>.</li>
 		</ul>
 		<h2 id="questions">Any Questions?</h2>
 		If you have any questions about Clutter, please feel free to ask it on <a href="https://scratch.mit.edu/users/Steve0Greatness">my profile</a> or <a href="https://github.com/Steve0Greatness/Clutter/discussions/new?category=q-a">Github</a>

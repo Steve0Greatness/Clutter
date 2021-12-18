@@ -47,7 +47,7 @@
 	<script>
 		var sharing = false
 		<%# this changes depending on whether you're editing or changing a project %><% if (isPre == false) { %>console.log("creating a new clutter")<% } else { %>console.log("editing a pre-existing clutter")
-		submitClutter()
+		submitClutter(<%- JSON.stringify(loginName) -%>)
 		<% } %>
 		function shareProject() {
 			if (<%- JSON.stringify(loginName) -%> == "not logged in") {

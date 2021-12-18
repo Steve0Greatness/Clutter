@@ -14,14 +14,22 @@
 <body>
 	<%- include("header") -%>
 	<div id="content">
+		<% if (cookieNotice) { %>
+		<div id="cookieNotice">
+			<img src="/img/cookie.png" height="225" align="right"><h1>Cookie Usage Notice</h1>
+			<p>This website uses cookies inorder to store user data. Don't worry, your data isn't able to be seen by anyone else.<br>
+			This website also uses local storage(a kind of cookie that never ends) to store user preferences(like who you're following)</p>
+			<button onclick="document.cookie = 'cookieNotice=1;expires=' + new Date(Date.now() + (1000 * 2650000)) + ';path=/;';document.getElementById('cookieNotice').outerHTML = ''">Accept</button> if you do not accept, then please leave the website<br clear="right">
+		</div>
+		<% } %>
 		<div id="newsSection">
 			<div id="news" class="block">
 				<div class="head">
-					Clutter News
+					Clutter News [<a href="/news">all</a>]
 				</div>
-				<% news.forEach(elm => { %>
+				<% news.slice(-5).forEach(elm => { %>
 				<div class="newsBorder">
-					<h1 class="projectNameHeading"><a href="<%- elm.link -%>"><%- elm.name -%></a></h1>
+					<img src="<%- elm.icon -%>" width="24"><h1 class="projectNameHeading" style="display:inline-block"><a href="<%- elm.link -%>"><%- elm.name -%></a></h1><br>
 					<%- elm.body -%>
 				</div>
 				<% }) %>
@@ -41,7 +49,6 @@
 			</div>
 			<% } %>
 		</div>
-		
 	</div>
 	<%- include("footer") -%>
 	<script type="text/javascript" src="/script.js"></script>

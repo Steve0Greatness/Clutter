@@ -28,11 +28,16 @@
 	--buttonReportBack: red;
 	--buttonReportBorder: #700;
 	--buttonReportColor: #fff;
-	--contentMinHeight: 82.5%;
+	--contentMinHeight: 82.46%;
 	--buttonFollowBack: #0af;
 	--buttonFollowBorder: #09e;
 	--buttonFollowColor: #000;
 	--bottomNewsBorder: #000;
+	--cookieNoticBack: #860;
+	--cookieNoticColor: #FFF;
+	--cookieNoticButtonBack: #750;
+	--cookieNoticButtonColor: #FFF;
+	--cookieNoticButtonBorder: #530;
 	font-family: sans-serif;
 }
 
@@ -418,6 +423,37 @@ table.viewTable th {
 	border-bottom: var(--bottomNewsBorder) 1px solid;
 }
 
+.topBorder {
+	margin-top: 1em;
+	border-top: var(--bottomNewsBorder) 1px solid;
+}
+
 #newsSection {
 	margin-bottom: 1em;
+}
+
+#cookieNotice {
+	background: var(--cookieNoticBack);
+	color: var(--cookieNoticColor);
+	padding: 15px;
+	margin-bottom: 15px;
+	button {
+		color: var(--cookieNoticButtonColor);
+		background: var(--cookieNoticButtonBack);
+		border-color: var(--cookieNoticButtonBorder);
+		margin-top: 1em;
+	}
+	img {
+		animation: rotate 15s infinite;
+		heigth: content;
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }

@@ -19,7 +19,5 @@ The editor is easy to use, it takes seconds to create a Clutter
 #### Suggested Code Editor
 I'd suggest to use [Replit](//replit.com), it automatically installs all the [dependencies](https://github.com/Steve0Greatness/Clutter/network/dependencies)
 
-<!--If the Repl is being run: in the "Shell" tab, type in "busybox reboot"-->
-
 ## Note
 This is still a work in progress(WIP), it isn't finished, and could take some time to finish.

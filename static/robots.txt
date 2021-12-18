@@ -1,16 +1,18 @@
 # start of file
-user-agent: *
-disallow: /post/
-disallow: /search
-disallow: /api/
-disallow: /edit/
-disallow: /create
-disallow: /debug/
-disallow: /embed/
-allow: /users/
-allow: /clutters/
-allow: /
-allow: /about
-allow: /getstarted
+User-agent: *
+Disallow: /post/*
+Disallow: /search
+Disallow: /api/*
+Disallow: /edit/*
+Disallow: /create
+Disallow: /debug/*
+Disallow: /embed/*
+Disallow: /myStuff
+Allow: /users/*
+Allow: /clutters/*
+Allow: /
+Allow: /about
+Allow: /getstarted
+Allow: /news
 
-sitemap: https://clutter.stevesgreatness.repl.co/sitemap.txt
+Sitemap: https://clutter.stevesgreatness.repl.co/sitemap.txt

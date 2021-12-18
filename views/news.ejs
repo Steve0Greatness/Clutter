@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<%# Type: dynamic 
+		Catorgory: home %>
+<html lang="en-US">
+
+<head>
+	<title>Clutter -- Compile Scratch Projects</title>
+	<meta name="title" content="Clutter -- Compile Scratch Projects">
+	<meta name="description" content="Clutter is a program to compile Scratch projects">
+	<%- include("headTag") -%>
+	<%- include("social") -%>
+</head>
+
+<body>
+	<%- include("header") -%>
+	<div id="content">
+		<h1>News</h1>
+		<p>Here is all news that has ever been added.</p>
+		<div id="news" class="topBorder">
+			<% news.forEach(elm => { %>
+			<div>
+				<h1 class="projectNameHeading"><a href="<%- elm.link -%>"><%- elm.name -%></a></h1>
+				<%- elm.body -%>
+			</div>
+			<% }) %>
+		</div>
+	</div>
+	<%- include("footer") -%>
+	<script type="text/javascript" src="/script.js"></script>
+</body>
+
+</html>

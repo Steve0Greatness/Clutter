@@ -27,8 +27,9 @@ function removeInput() {
 	projectIds.removeChild(newest[newest.length - 1])
 	projectIds.removeChild(newlineNewest[newlineNewest.length - 1])
 }
-function submitClutter() {
+function submitClutter(username) {
 	let form = document.forms["projectIds"]
+	console.log(username)
 	let formData = Object.values(form)
 	let formValues = []
 	for (let i = 0; i < formData.length; i++) {
@@ -38,11 +39,11 @@ function submitClutter() {
 			alert("Something doesn't seem right about the project at spot " + i + ". Please make sure it's a full project url.")
 		}
 	}
-	renderClutter(formValues)
+	renderClutter(formValues, username)
 }
 //rendering clutters
 var clutter = []
-function renderClutter(array) {
+function renderClutter(array, username) {
 	console.log(array, `this should repeat ${array.length} time(s)`)
 	clutter = []
 	for (let i = 0; i < array.length; i++) {
@@ -51,8 +52,7 @@ function renderClutter(array) {
 	console.log(clutter)
 	let cluttero = clutter[0]
 	let embed = checkForSlash(cluttero)
-	let user = checkLogin()
-	document.getElementById("iframe").src = clutter[0] + embed + "?autoplay&username=" + user
+	document.getElementById("iframe").src = clutter[0] + embed + "?autoplay&username=" + username
 }
 
 function nextProject(array) {
@@ -106,27 +106,6 @@ function checkLogin() {
 		user = localStorage.getItem("user")
 	}
 	return user
-}
-
-function setLogin() {
-
-}
-
-const charAppears = (char, inside) => {
-	let ammount = 0
-	inside.split(char).forEach(elm => {
-		if (elm == '') {
-			ammount++
-		}
-	})
-	return ammount
-}
-
-const toBinary = (str = '') => {
-	let res = str.split('').map(char => {
-		return char.charCodeAt(0).toString(2);
-	}).join(' ');
-	return res;
 }
 
 //log them out
