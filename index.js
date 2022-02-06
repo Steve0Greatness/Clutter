@@ -570,6 +570,7 @@ function sendOtherCodeError(error = 404, res, method) {
 //listening for a sever connection
 app.listen(port, () => {
 	console.log("If you're using this locally on your machine, you can find this at http://localhost:" + port)
+	db.getAll().then(data => console.log(data))
 })
 
 /*
